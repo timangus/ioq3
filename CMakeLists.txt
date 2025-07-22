@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 include(cmake/names.cmake)
-project(${PROJECT_NAME} VERSION 1.36 LANGUAGES C)
+project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C)
 
 option(BUILD_SERVER "Build dedicated server" ON)
 option(BUILD_CLIENT "Build client" ON)
