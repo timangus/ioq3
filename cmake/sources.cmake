@@ -1,0 +1,383 @@
+set(COMMON_SOURCES
+    ${SOURCE_DIR}/qcommon/cm_load.c
+    ${SOURCE_DIR}/qcommon/cm_patch.c
+    ${SOURCE_DIR}/qcommon/cm_polylib.c
+    ${SOURCE_DIR}/qcommon/cm_test.c
+    ${SOURCE_DIR}/qcommon/cm_trace.c
+    ${SOURCE_DIR}/qcommon/cmd.c
+    ${SOURCE_DIR}/qcommon/common.c
+    ${SOURCE_DIR}/qcommon/cvar.c
+    ${SOURCE_DIR}/qcommon/files.c
+    ${SOURCE_DIR}/qcommon/md4.c
+    ${SOURCE_DIR}/qcommon/md5.c
+    ${SOURCE_DIR}/qcommon/msg.c
+    ${SOURCE_DIR}/qcommon/net_chan.c
+    ${SOURCE_DIR}/qcommon/net_ip.c
+    ${SOURCE_DIR}/qcommon/huffman.c
+    ${SOURCE_DIR}/qcommon/q_math.c
+    ${SOURCE_DIR}/qcommon/q_shared.c
+    ${SOURCE_DIR}/qcommon/unzip.c
+    ${SOURCE_DIR}/qcommon/ioapi.c
+    ${SOURCE_DIR}/qcommon/vm.c
+    ${SOURCE_DIR}/qcommon/vm_interpreted.c
+    ${SOURCE_DIR}/qcommon/vm_x86.c
+)
+
+set(SYSTEM_SOURCES
+    ${SOURCE_DIR}/sys/con_log.c
+    ${SOURCE_DIR}/sys/sys_autoupdater.c
+    ${SOURCE_DIR}/sys/sys_main.c
+    ${SOURCE_DIR}/sys/sys_unix.c
+    ${SOURCE_DIR}/sys/con_tty.c
+)
+
+set(ASM_SOURCES
+    ${SOURCE_DIR}/asm/snapvector.c
+    ${SOURCE_DIR}/asm/ftola.c
+)
+
+set(BOTLIB_SOURCES
+    ${SOURCE_DIR}/botlib/be_aas_bspq3.c
+    ${SOURCE_DIR}/botlib/be_aas_cluster.c
+    ${SOURCE_DIR}/botlib/be_aas_debug.c
+    ${SOURCE_DIR}/botlib/be_aas_entity.c
+    ${SOURCE_DIR}/botlib/be_aas_file.c
+    ${SOURCE_DIR}/botlib/be_aas_main.c
+    ${SOURCE_DIR}/botlib/be_aas_move.c
+    ${SOURCE_DIR}/botlib/be_aas_optimize.c
+    ${SOURCE_DIR}/botlib/be_aas_reach.c
+    ${SOURCE_DIR}/botlib/be_aas_route.c
+    ${SOURCE_DIR}/botlib/be_aas_routealt.c
+    ${SOURCE_DIR}/botlib/be_aas_sample.c
+    ${SOURCE_DIR}/botlib/be_ai_char.c
+    ${SOURCE_DIR}/botlib/be_ai_chat.c
+    ${SOURCE_DIR}/botlib/be_ai_gen.c
+    ${SOURCE_DIR}/botlib/be_ai_goal.c
+    ${SOURCE_DIR}/botlib/be_ai_move.c
+    ${SOURCE_DIR}/botlib/be_ai_weap.c
+    ${SOURCE_DIR}/botlib/be_ai_weight.c
+    ${SOURCE_DIR}/botlib/be_ea.c
+    ${SOURCE_DIR}/botlib/be_interface.c
+    ${SOURCE_DIR}/botlib/l_crc.c
+    ${SOURCE_DIR}/botlib/l_libvar.c
+    ${SOURCE_DIR}/botlib/l_log.c
+    ${SOURCE_DIR}/botlib/l_memory.c
+    ${SOURCE_DIR}/botlib/l_precomp.c
+    ${SOURCE_DIR}/botlib/l_script.c
+    ${SOURCE_DIR}/botlib/l_struct.c
+)
+
+set(SERVER_SOURCES
+    ${SOURCE_DIR}/server/sv_bot.c
+    ${SOURCE_DIR}/server/sv_client.c
+    ${SOURCE_DIR}/server/sv_ccmds.c
+    ${SOURCE_DIR}/server/sv_game.c
+    ${SOURCE_DIR}/server/sv_init.c
+    ${SOURCE_DIR}/server/sv_main.c
+    ${SOURCE_DIR}/server/sv_net_chan.c
+    ${SOURCE_DIR}/server/sv_snapshot.c
+    ${SOURCE_DIR}/server/sv_world.c
+)
+
+set(NULL_SOURCES
+    ${SOURCE_DIR}/null/null_client.c
+    ${SOURCE_DIR}/null/null_input.c
+    ${SOURCE_DIR}/null/null_snddma.c
+)
+
+set(CLIENT_SOURCES
+    ${SOURCE_DIR}/client/cl_cgame.c
+    ${SOURCE_DIR}/client/cl_cin.c
+    ${SOURCE_DIR}/client/cl_console.c
+    ${SOURCE_DIR}/client/cl_input.c
+    ${SOURCE_DIR}/client/cl_keys.c
+    ${SOURCE_DIR}/client/cl_main.c
+    ${SOURCE_DIR}/client/cl_net_chan.c
+    ${SOURCE_DIR}/client/cl_parse.c
+    ${SOURCE_DIR}/client/cl_scrn.c
+    ${SOURCE_DIR}/client/cl_ui.c
+    ${SOURCE_DIR}/client/cl_avi.c
+    ${SOURCE_DIR}/client/cl_curl.c
+    ${SOURCE_DIR}/client/libmumblelink.c
+    ${SOURCE_DIR}/client/snd_altivec.c
+    ${SOURCE_DIR}/client/snd_adpcm.c
+    ${SOURCE_DIR}/client/snd_dma.c
+    ${SOURCE_DIR}/client/snd_mem.c
+    ${SOURCE_DIR}/client/snd_mix.c
+    ${SOURCE_DIR}/client/snd_wavelet.c
+    ${SOURCE_DIR}/client/snd_main.c
+    ${SOURCE_DIR}/client/snd_codec.c
+    ${SOURCE_DIR}/client/snd_codec_wav.c
+    ${SOURCE_DIR}/client/snd_codec_ogg.c
+    ${SOURCE_DIR}/client/snd_codec_opus.c
+    ${SOURCE_DIR}/client/qal.c
+    ${SOURCE_DIR}/client/snd_openal.c
+)
+
+set(SDL_CLIENT_SOURCES
+    ${SOURCE_DIR}/sdl/sdl_input.c
+    ${SOURCE_DIR}/sdl/sdl_snd.c
+)
+
+set(RENDERER_COMMON_SOURCES
+    ${SOURCE_DIR}/renderercommon/tr_font.c
+    ${SOURCE_DIR}/renderercommon/tr_image_bmp.c
+    ${SOURCE_DIR}/renderercommon/tr_image_jpg.c
+    ${SOURCE_DIR}/renderercommon/tr_image_pcx.c
+    ${SOURCE_DIR}/renderercommon/tr_image_png.c
+    ${SOURCE_DIR}/renderercommon/tr_image_tga.c
+    ${SOURCE_DIR}/renderercommon/tr_noise.c
+)
+
+set(RENDERER_GL1_SOURCES
+    ${SOURCE_DIR}/renderergl1/tr_altivec.c
+    ${SOURCE_DIR}/renderergl1/tr_animation.c
+    ${SOURCE_DIR}/renderergl1/tr_backend.c
+    ${SOURCE_DIR}/renderergl1/tr_bsp.c
+    ${SOURCE_DIR}/renderergl1/tr_cmds.c
+    ${SOURCE_DIR}/renderergl1/tr_curve.c
+    ${SOURCE_DIR}/renderergl1/tr_flares.c
+    ${SOURCE_DIR}/renderergl1/tr_image.c
+    ${SOURCE_DIR}/renderergl1/tr_init.c
+    ${SOURCE_DIR}/renderergl1/tr_light.c
+    ${SOURCE_DIR}/renderergl1/tr_main.c
+    ${SOURCE_DIR}/renderergl1/tr_marks.c
+    ${SOURCE_DIR}/renderergl1/tr_mesh.c
+    ${SOURCE_DIR}/renderergl1/tr_model.c
+    ${SOURCE_DIR}/renderergl1/tr_model_iqm.c
+    ${SOURCE_DIR}/renderergl1/tr_scene.c
+    ${SOURCE_DIR}/renderergl1/tr_shade.c
+    ${SOURCE_DIR}/renderergl1/tr_shade_calc.c
+    ${SOURCE_DIR}/renderergl1/tr_shader.c
+    ${SOURCE_DIR}/renderergl1/tr_shadows.c
+    ${SOURCE_DIR}/renderergl1/tr_sky.c
+    ${SOURCE_DIR}/renderergl1/tr_surface.c
+    ${SOURCE_DIR}/renderergl1/tr_world.c
+)
+
+set(RENDERER_GL2_SOURCES
+    ${SOURCE_DIR}/renderergl2/tr_animation.c
+    ${SOURCE_DIR}/renderergl2/tr_backend.c
+    ${SOURCE_DIR}/renderergl2/tr_bsp.c
+    ${SOURCE_DIR}/renderergl2/tr_cmds.c
+    ${SOURCE_DIR}/renderergl2/tr_curve.c
+    ${SOURCE_DIR}/renderergl2/tr_dsa.c
+    ${SOURCE_DIR}/renderergl2/tr_extramath.c
+    ${SOURCE_DIR}/renderergl2/tr_extensions.c
+    ${SOURCE_DIR}/renderergl2/tr_fbo.c
+    ${SOURCE_DIR}/renderergl2/tr_flares.c
+    ${SOURCE_DIR}/renderergl2/tr_glsl.c
+    ${SOURCE_DIR}/renderergl2/tr_image.c
+    ${SOURCE_DIR}/renderergl2/tr_image_dds.c
+    ${SOURCE_DIR}/renderergl2/tr_init.c
+    ${SOURCE_DIR}/renderergl2/tr_light.c
+    ${SOURCE_DIR}/renderergl2/tr_main.c
+    ${SOURCE_DIR}/renderergl2/tr_marks.c
+    ${SOURCE_DIR}/renderergl2/tr_mesh.c
+    ${SOURCE_DIR}/renderergl2/tr_model.c
+    ${SOURCE_DIR}/renderergl2/tr_model_iqm.c
+    ${SOURCE_DIR}/renderergl2/tr_postprocess.c
+    ${SOURCE_DIR}/renderergl2/tr_scene.c
+    ${SOURCE_DIR}/renderergl2/tr_shade.c
+    ${SOURCE_DIR}/renderergl2/tr_shade_calc.c
+    ${SOURCE_DIR}/renderergl2/tr_shader.c
+    ${SOURCE_DIR}/renderergl2/tr_shadows.c
+    ${SOURCE_DIR}/renderergl2/tr_sky.c
+    ${SOURCE_DIR}/renderergl2/tr_surface.c
+    ${SOURCE_DIR}/renderergl2/tr_vbo.c
+    ${SOURCE_DIR}/renderergl2/tr_world.c
+)
+
+set(SDL_RENDERER_SOURCES
+    ${SOURCE_DIR}/sdl/sdl_gamma.c
+    ${SOURCE_DIR}/sdl/sdl_glimp.c
+)
+
+set(DYNAMIC_RENDERER_SOURCES
+    ${SOURCE_DIR}/qcommon/q_shared.c
+    ${SOURCE_DIR}/qcommon/puff.c
+    ${SOURCE_DIR}/qcommon/q_math.c
+    ${SOURCE_DIR}/renderergl1/tr_subs.c
+)
+
+set(CGAME_SOURCES
+    ${SOURCE_DIR}/cgame/cg_main.c
+    ${SOURCE_DIR}/game/bg_misc.c
+    ${SOURCE_DIR}/game/bg_pmove.c
+    ${SOURCE_DIR}/game/bg_slidemove.c
+    ${SOURCE_DIR}/game/bg_lib.c
+    ${SOURCE_DIR}/cgame/cg_consolecmds.c
+    ${SOURCE_DIR}/cgame/cg_draw.c
+    ${SOURCE_DIR}/cgame/cg_drawtools.c
+    ${SOURCE_DIR}/cgame/cg_effects.c
+    ${SOURCE_DIR}/cgame/cg_ents.c
+    ${SOURCE_DIR}/cgame/cg_event.c
+    ${SOURCE_DIR}/cgame/cg_info.c
+    ${SOURCE_DIR}/cgame/cg_localents.c
+    ${SOURCE_DIR}/cgame/cg_marks.c
+    ${SOURCE_DIR}/cgame/cg_particles.c
+    ${SOURCE_DIR}/cgame/cg_players.c
+    ${SOURCE_DIR}/cgame/cg_playerstate.c
+    ${SOURCE_DIR}/cgame/cg_predict.c
+    ${SOURCE_DIR}/cgame/cg_scoreboard.c
+    ${SOURCE_DIR}/cgame/cg_servercmds.c
+    ${SOURCE_DIR}/cgame/cg_snapshot.c
+    ${SOURCE_DIR}/cgame/cg_view.c
+    ${SOURCE_DIR}/cgame/cg_weapons.c
+)
+
+set(CGAME_BINARY_SOURCES ${SOURCE_DIR}/cgame/cg_syscalls.c)
+set(CGAME_QVM_SOURCES ${SOURCE_DIR}/cgame/cg_syscalls.asm)
+
+set(GAME_SOURCES
+    ${SOURCE_DIR}/game/g_main.c
+    ${SOURCE_DIR}/game/ai_chat.c
+    ${SOURCE_DIR}/game/ai_cmd.c
+    ${SOURCE_DIR}/game/ai_dmnet.c
+    ${SOURCE_DIR}/game/ai_dmq3.c
+    ${SOURCE_DIR}/game/ai_main.c
+    ${SOURCE_DIR}/game/ai_team.c
+    ${SOURCE_DIR}/game/ai_vcmd.c
+    ${SOURCE_DIR}/game/bg_misc.c
+    ${SOURCE_DIR}/game/bg_pmove.c
+    ${SOURCE_DIR}/game/bg_slidemove.c
+    ${SOURCE_DIR}/game/bg_lib.c
+    ${SOURCE_DIR}/game/g_active.c
+    ${SOURCE_DIR}/game/g_arenas.c
+    ${SOURCE_DIR}/game/g_bot.c
+    ${SOURCE_DIR}/game/g_client.c
+    ${SOURCE_DIR}/game/g_cmds.c
+    ${SOURCE_DIR}/game/g_combat.c
+    ${SOURCE_DIR}/game/g_items.c
+    ${SOURCE_DIR}/game/g_mem.c
+    ${SOURCE_DIR}/game/g_misc.c
+    ${SOURCE_DIR}/game/g_missile.c
+    ${SOURCE_DIR}/game/g_mover.c
+    ${SOURCE_DIR}/game/g_session.c
+    ${SOURCE_DIR}/game/g_spawn.c
+    ${SOURCE_DIR}/game/g_svcmds.c
+    ${SOURCE_DIR}/game/g_target.c
+    ${SOURCE_DIR}/game/g_team.c
+    ${SOURCE_DIR}/game/g_trigger.c
+    ${SOURCE_DIR}/game/g_utils.c
+    ${SOURCE_DIR}/game/g_weapon.c
+)
+
+set(GAME_BINARY_SOURCES ${SOURCE_DIR}/game/g_syscalls.c)
+set(GAME_QVM_SOURCES ${SOURCE_DIR}/game/g_syscalls.asm)
+
+set(UI_SOURCES
+    ${SOURCE_DIR}/q3_ui/ui_main.c
+    ${SOURCE_DIR}/game/bg_misc.c
+    ${SOURCE_DIR}/game/bg_lib.c
+    ${SOURCE_DIR}/q3_ui/ui_addbots.c
+    ${SOURCE_DIR}/q3_ui/ui_atoms.c
+    ${SOURCE_DIR}/q3_ui/ui_cdkey.c
+    ${SOURCE_DIR}/q3_ui/ui_cinematics.c
+    ${SOURCE_DIR}/q3_ui/ui_confirm.c
+    ${SOURCE_DIR}/q3_ui/ui_connect.c
+    ${SOURCE_DIR}/q3_ui/ui_controls2.c
+    ${SOURCE_DIR}/q3_ui/ui_credits.c
+    ${SOURCE_DIR}/q3_ui/ui_demo2.c
+    ${SOURCE_DIR}/q3_ui/ui_display.c
+    ${SOURCE_DIR}/q3_ui/ui_gameinfo.c
+    ${SOURCE_DIR}/q3_ui/ui_ingame.c
+    ${SOURCE_DIR}/q3_ui/ui_loadconfig.c
+    ${SOURCE_DIR}/q3_ui/ui_menu.c
+    ${SOURCE_DIR}/q3_ui/ui_mfield.c
+    ${SOURCE_DIR}/q3_ui/ui_mods.c
+    ${SOURCE_DIR}/q3_ui/ui_network.c
+    ${SOURCE_DIR}/q3_ui/ui_options.c
+    ${SOURCE_DIR}/q3_ui/ui_playermodel.c
+    ${SOURCE_DIR}/q3_ui/ui_players.c
+    ${SOURCE_DIR}/q3_ui/ui_playersettings.c
+    ${SOURCE_DIR}/q3_ui/ui_preferences.c
+    ${SOURCE_DIR}/q3_ui/ui_qmenu.c
+    ${SOURCE_DIR}/q3_ui/ui_removebots.c
+    ${SOURCE_DIR}/q3_ui/ui_saveconfig.c
+    ${SOURCE_DIR}/q3_ui/ui_serverinfo.c
+    ${SOURCE_DIR}/q3_ui/ui_servers2.c
+    ${SOURCE_DIR}/q3_ui/ui_setup.c
+    ${SOURCE_DIR}/q3_ui/ui_sound.c
+    ${SOURCE_DIR}/q3_ui/ui_sparena.c
+    ${SOURCE_DIR}/q3_ui/ui_specifyserver.c
+    ${SOURCE_DIR}/q3_ui/ui_splevel.c
+    ${SOURCE_DIR}/q3_ui/ui_sppostgame.c
+    ${SOURCE_DIR}/q3_ui/ui_spskill.c
+    ${SOURCE_DIR}/q3_ui/ui_startserver.c
+    ${SOURCE_DIR}/q3_ui/ui_team.c
+    ${SOURCE_DIR}/q3_ui/ui_teamorders.c
+    ${SOURCE_DIR}/q3_ui/ui_video.c
+)
+
+set(UI_BINARY_SOURCES ${SOURCE_DIR}/ui/ui_syscalls.c)
+set(UI_QVM_SOURCES ${SOURCE_DIR}/ui/ui_syscalls.asm)
+
+set(GAME_MODULE_SHARED_SOURCES
+    ${SOURCE_DIR}/qcommon/q_math.c
+    ${SOURCE_DIR}/qcommon/q_shared.c
+)
+
+set(Q3ASM_SOURCES
+    ${SOURCE_DIR}/tools/asm/q3asm.c
+    ${SOURCE_DIR}/tools/asm/cmdlib.c
+)
+
+set(Q3LCC_SOURCES
+    ${SOURCE_DIR}/tools/lcc/etc/lcc.c
+    ${SOURCE_DIR}/tools/lcc/etc/bytecode.c
+)
+
+set(Q3RCC_SOURCES
+    ${SOURCE_DIR}/tools/lcc/src/alloc.c
+    ${SOURCE_DIR}/tools/lcc/src/bind.c
+    ${SOURCE_DIR}/tools/lcc/src/bytecode.c
+    ${SOURCE_DIR}/tools/lcc/src/dag.c
+    ${SOURCE_DIR}/tools/lcc/src/decl.c
+    ${SOURCE_DIR}/tools/lcc/src/enode.c
+    ${SOURCE_DIR}/tools/lcc/src/error.c
+    ${SOURCE_DIR}/tools/lcc/src/event.c
+    ${SOURCE_DIR}/tools/lcc/src/expr.c
+    ${SOURCE_DIR}/tools/lcc/src/gen.c
+    ${SOURCE_DIR}/tools/lcc/src/init.c
+    ${SOURCE_DIR}/tools/lcc/src/inits.c
+    ${SOURCE_DIR}/tools/lcc/src/input.c
+    ${SOURCE_DIR}/tools/lcc/src/lex.c
+    ${SOURCE_DIR}/tools/lcc/src/list.c
+    ${SOURCE_DIR}/tools/lcc/src/main.c
+    ${SOURCE_DIR}/tools/lcc/src/null.c
+    ${SOURCE_DIR}/tools/lcc/src/output.c
+    ${SOURCE_DIR}/tools/lcc/src/prof.c
+    ${SOURCE_DIR}/tools/lcc/src/profio.c
+    ${SOURCE_DIR}/tools/lcc/src/simp.c
+    ${SOURCE_DIR}/tools/lcc/src/stmt.c
+    ${SOURCE_DIR}/tools/lcc/src/string.c
+    ${SOURCE_DIR}/tools/lcc/src/sym.c
+    ${SOURCE_DIR}/tools/lcc/src/symbolic.c
+    ${SOURCE_DIR}/tools/lcc/src/trace.c
+    ${SOURCE_DIR}/tools/lcc/src/tree.c
+    ${SOURCE_DIR}/tools/lcc/src/types.c
+)
+
+set(Q3RCC_DAGCHECK_SOURCE ${SOURCE_DIR}/tools/lcc/src/dagcheck.md)
+
+set(Q3CPP_SOURCES
+    ${SOURCE_DIR}/tools/lcc/cpp/cpp.c
+    ${SOURCE_DIR}/tools/lcc/cpp/lex.c
+    ${SOURCE_DIR}/tools/lcc/cpp/nlist.c
+    ${SOURCE_DIR}/tools/lcc/cpp/tokens.c
+    ${SOURCE_DIR}/tools/lcc/cpp/macro.c
+    ${SOURCE_DIR}/tools/lcc/cpp/eval.c
+    ${SOURCE_DIR}/tools/lcc/cpp/include.c
+    ${SOURCE_DIR}/tools/lcc/cpp/hideset.c
+    ${SOURCE_DIR}/tools/lcc/cpp/getopt.c
+    ${SOURCE_DIR}/tools/lcc/cpp/unix.c
+)
+
+set(LBURG_SOURCES
+    ${SOURCE_DIR}/tools/lcc/lburg/lburg.c
+    ${SOURCE_DIR}/tools/lcc/lburg/gram.c
+)
+
+file(GLOB ZLIB_SOURCES "${SOURCE_DIR}/zlib-1.3.1/*.c")
+file(GLOB JPEG_SOURCES "${SOURCE_DIR}/jpeg-9f/j*.c")
