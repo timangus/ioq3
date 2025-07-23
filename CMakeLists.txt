@@ -174,9 +174,33 @@ if(BUILD_RENDERER_GL1)
 endif()
 
 if(BUILD_RENDERER_GL2)
+    set(SHADERS_DIR "${CMAKE_BINARY_DIR}/shaders.dir")
+    file(MAKE_DIRECTORY ${SHADERS_DIR})
+
+    foreach(SHADER_FILE IN LISTS RENDERER_GL2_SHADER_SOURCES)
+        get_filename_component(SHADER_NAME "${SHADER_FILE}" NAME_WE)
+        set(SHADER_C_FILE "${SHADERS_DIR}/${SHADER_NAME}.c")
+
+        string(REPLACE "${CMAKE_BINARY_DIR}/" "" SHADER_C_FILE_COMMENT "${SHADER_C_FILE}")
+
+        add_custom_command(
+            OUTPUT ${SHADER_C_FILE}
+            COMMAND ${CMAKE_COMMAND}
+                -DINPUT_FILE=${SHADER_FILE}
+                -DOUTPUT_FILE=${SHADER_C_FILE}
+                -DSHADER_NAME=${SHADER_NAME}
+                -P ${CMAKE_SOURCE_DIR}/cmake/stringify_shader.cmake
+            DEPENDS ${SHADER_FILE}
+            COMMENT "Stringify shader ${SHADER_C_FILE_COMMENT}"
+        )
+
+        list(APPEND RENDERER_GL2_SHADER_C_SOURCES ${SHADER_C_FILE})
+    endforeach()
+
     set(RENDERER_GL2_BINARY_SOURCES
         ${RENDERER_COMMON_SOURCES}
         ${RENDERER_GL2_SOURCES}
+        ${RENDERER_GL2_SHADER_C_SOURCES}
         ${SDL_RENDERER_SOURCES}
         ${DYNAMIC_RENDERER_SOURCES}
         ${JPEG_SOURCES}
