@@ -41,13 +41,7 @@ set(SYSTEM_SOURCES
     ${SOURCE_DIR}/sys/con_log.c
     ${SOURCE_DIR}/sys/sys_autoupdater.c
     ${SOURCE_DIR}/sys/sys_main.c
-    ${SOURCE_DIR}/sys/sys_unix.c
-    ${SOURCE_DIR}/sys/con_tty.c
-)
-
-set(ASM_SOURCES
-    ${SOURCE_DIR}/asm/snapvector.c
-    ${SOURCE_DIR}/asm/ftola.c
+    ${SYSTEM_PLATFORM_SOURCES}
 )
 
 set(BOTLIB_SOURCES
@@ -111,7 +105,6 @@ set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/cl_scrn.c
     ${SOURCE_DIR}/client/cl_ui.c
     ${SOURCE_DIR}/client/cl_avi.c
-    ${SOURCE_DIR}/client/cl_http_curl.c
     ${SOURCE_DIR}/client/libmumblelink.c
     ${SOURCE_DIR}/client/snd_altivec.c
     ${SOURCE_DIR}/client/snd_adpcm.c
@@ -126,6 +119,7 @@ set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/snd_codec_opus.c
     ${SOURCE_DIR}/client/qal.c
     ${SOURCE_DIR}/client/snd_openal.c
+    ${CLIENT_PLATFORM_SOURCES}
 )
 
 set(SDL_CLIENT_SOURCES

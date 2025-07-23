@@ -64,16 +64,24 @@ add_compile_definitions(
 )
 
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
-include(cmake/sources.cmake)
 
 # FIXME internal libs only
 include_directories("${SOURCE_DIR}/zlib-1.3.1")
 add_compile_definitions(NO_GZIP)
 
-set(COMMON_LIBS dl m)
+if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    include(cmake/msvc.cmake)
+elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    include(cmake/gnu.cmake)
+endif()
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SDL2 REQUIRED sdl2)
+if(WIN32)
+    include(cmake/windows.cmake)
+else()
+    include(cmake/unix.cmake)
+endif()
+
+include(cmake/sources.cmake)
 
 function(set_output_dirs TARGET)
     list(REMOVE_AT ARGV 0)
