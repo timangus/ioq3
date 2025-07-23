@@ -13,6 +13,14 @@ jobs:
         sudo apt-get install libsdl2-dev
     - name: Compile
       run: |
-        mkdir build
-        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B build -G Ninja
+        cmake --build build
+  windows:
+    name: Windows
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compile
+      run: |
+        cmake -S . -B build
         cmake --build build
