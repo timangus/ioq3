@@ -87,25 +87,25 @@ function(set_output_dirs TARGET)
     list(REMOVE_AT ARGV 0)
     cmake_parse_arguments(ARG "" "" "SUBDIRECTORY" ${ARGV})
 
-    if(CMAKE_CONFIGURATION_TYPES)  # Multi-config
+    if(CMAKE_CONFIGURATION_TYPES) # Multi-config
         set(CONFIGS ${CMAKE_CONFIGURATION_TYPES})
-    else()  # Single-config
+    else() # Single-config
         set(CONFIGS ${CMAKE_BUILD_TYPE})
     endif()
 
     foreach(CONFIG ${CONFIGS})
         string(TOUPPER "${CONFIG}" CONFIG_UPPER)
 
+        if(ARG_SUBDIRECTORY)
+            set(LIB_DIR "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}")
+        else()
+            set(LIB_DIR "${CMAKE_BINARY_DIR}/${CONFIG}")
+        endif()
+
         set_target_properties(${TARGET} PROPERTIES
-            if(ARG_SUBDIRECTORY)
-                LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}"
-                RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}"
-                ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}"
-            else()
-                LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}"
-                RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}"
-                ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}"
-            endif()
+            LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
+            RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
+            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
         )
     endforeach()
 endfunction()
