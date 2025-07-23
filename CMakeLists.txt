@@ -45,17 +45,17 @@ set(RENDERER_GL2_BINARY "renderer_opengl2_${ARCH}")
 
 set(CGAME_MODULE_BINARY "${CGAME_MODULE}${ARCH}")
 set(CGAME_MODULE_BINARY_BASEGAME "${CGAME_MODULE_BINARY}_${BASEGAME}")
-set(CGAME_MODULE_QVM "${CGAME_MODULE}")
+set(CGAME_MODULE_QVM "${CGAME_MODULE}qvm")
 set(CGAME_MODULE_QVM_BASEGAME "${CGAME_MODULE_QVM}_${BASEGAME}")
 
 set(GAME_MODULE_BINARY "${GAME_MODULE}${ARCH}")
 set(GAME_MODULE_BINARY_BASEGAME "${GAME_MODULE_BINARY}_${BASEGAME}")
-set(GAME_MODULE_QVM "${GAME_MODULE}")
+set(GAME_MODULE_QVM "${GAME_MODULE}qvm")
 set(GAME_MODULE_QVM_BASEGAME "${GAME_MODULE_QVM}_${BASEGAME}")
 
 set(UI_MODULE_BINARY "${UI_MODULE}${ARCH}")
 set(UI_MODULE_BINARY_BASEGAME "${UI_MODULE_BINARY}_${BASEGAME}")
-set(UI_MODULE_QVM "${UI_MODULE}")
+set(UI_MODULE_QVM "${UI_MODULE}qvm")
 set(UI_MODULE_QVM_BASEGAME "${UI_MODULE_QVM}_${BASEGAME}")
 
 add_compile_definitions(
@@ -219,6 +219,7 @@ if(BUILD_GAME_QVMS)
     set_output_dirs(q3asm SUBDIRECTORY tools)
     add_executable(q3lcc ${Q3LCC_SOURCES})
     set_output_dirs(q3lcc SUBDIRECTORY tools)
+    add_dependencies(q3lcc q3rcc q3cpp)
 
     add_executable(lburg ${LBURG_SOURCES})
     set_output_dirs(lburg SUBDIRECTORY tools)
@@ -256,10 +257,7 @@ if(BUILD_GAME_QVMS)
         endif()
 
         set(QVM_ASM_DIR "${CMAKE_BINARY_DIR}/qvm.dir/${MODULE_NAME}")
-        add_custom_command(
-            OUTPUT "${QVM_ASM_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_ASM_DIR}"
-        )
+        file(MAKE_DIRECTORY ${QVM_ASM_DIR})
 
         set(LCC_FLAGS "")
         foreach(DEFINITION IN LISTS ARG_DEFINITIONS)
@@ -280,7 +278,7 @@ if(BUILD_GAME_QVMS)
             add_custom_command(
                 OUTPUT ${ASM_FILE}
                 COMMAND q3lcc ${LCC_FLAGS} -o ${ASM_FILE} ${SOURCE}
-                DEPENDS ${SOURCE} ${QVM_ASM_DIR} q3lcc q3rcc q3cpp
+                DEPENDS ${SOURCE} q3lcc
                 COMMENT "Building C object ${ASM_FILE_COMMENT}"
             )
 
@@ -291,32 +289,31 @@ if(BUILD_GAME_QVMS)
         add_custom_command(
             OUTPUT ${QVM_FILE}
             COMMAND q3asm -o ${QVM_FILE} ${ASM_FILES}
-            DEPENDS ${ASM_FILES} ${QVM_OUTPUT_DIR} q3asm
+            DEPENDS ${ASM_FILES} q3asm
             COMMENT "Linking C QVM library ${QVM_FILE_COMMENT}"
         )
 
         string(REGEX REPLACE "[^A-Za-z0-9]" "_" TARGET_NAME "${MODULE_NAME}")
         add_custom_target(${TARGET_NAME} ALL DEPENDS ${QVM_FILE})
-        add_dependencies(${TARGET_NAME} q3asm q3lcc q3rcc q3cpp)
     endfunction()
 
     add_qvm(${CGAME_MODULE_QVM_BASEGAME}
         DEFINITIONS CGAME
-        OUTPUT_NAME "${CGAME_MODULE_QVM}"
+        OUTPUT_NAME "${CGAME_MODULE}"
         OUTPUT_DIRECTORY "${BASEGAME}/vm"
         SOURCES ${CGAME_SOURCES_BASEGAME} ${CGAME_QVM_SOURCES}
     )
 
     add_qvm(${GAME_MODULE_QVM_BASEGAME}
         DEFINITIONS QAGAME
-        OUTPUT_NAME "${GAME_MODULE_QVM}"
+        OUTPUT_NAME "${GAME_MODULE}"
         OUTPUT_DIRECTORY "${BASEGAME}/vm"
         SOURCES ${GAME_SOURCES_BASEGAME} ${GAME_QVM_SOURCES}
     )
 
     add_qvm(${UI_MODULE_QVM_BASEGAME}
         DEFINITIONS UI
-        OUTPUT_NAME "${UI_MODULE_QVM}"
+        OUTPUT_NAME "${UI_MODULE}"
         OUTPUT_DIRECTORY "${BASEGAME}/vm"
         SOURCES ${UI_SOURCES_BASEGAME} ${UI_QVM_SOURCES}
     )
