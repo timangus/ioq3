@@ -20,8 +20,22 @@ set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/ioapi.c
     ${SOURCE_DIR}/qcommon/vm.c
     ${SOURCE_DIR}/qcommon/vm_interpreted.c
-    ${SOURCE_DIR}/qcommon/vm_x86.c
 )
+
+if(ARCH MATCHES "x86" OR ARCH MATCHES "x86_64")
+    list(APPEND COMMON_SOURCES
+        ${SOURCE_DIR}/qcommon/vm_x86.c
+    )
+elseif(ARCH MATCHES "ppc" OR ARCH MATCHES "ppc64")
+    list(APPEND COMMON_SOURCES
+        ${SOURCE_DIR}/qcommon/vm_powerpc.c
+        ${SOURCE_DIR}/qcommon/vm_powerpc_asm.c
+    )
+elseif(ARCH MATCHES "arm" OR ARCH MATCHES "arm64")
+    list(APPEND COMMON_SOURCES
+        ${SOURCE_DIR}/qcommon/vm_armv71.c
+    )
+endif()
 
 set(SYSTEM_SOURCES
     ${SOURCE_DIR}/sys/con_log.c
