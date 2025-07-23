@@ -232,7 +232,7 @@ if(BUILD_GAME_QVMS)
         if(ARG_OUTPUT_DIRECTORY)
             set(QVM_OUTPUT_DIR "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_DIRECTORY}")
         endif()
-        add_custom_command(PRE_BUILD
+        add_custom_command(
             OUTPUT "${QVM_OUTPUT_DIR}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_OUTPUT_DIR}"
         )
@@ -244,7 +244,7 @@ if(BUILD_GAME_QVMS)
         endif()
 
         set(QVM_ASM_DIR "${CMAKE_BINARY_DIR}/qvm.dir/${MODULE_NAME}")
-        add_custom_command(PRE_BUILD
+        add_custom_command(
             OUTPUT "${QVM_ASM_DIR}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_ASM_DIR}"
         )
