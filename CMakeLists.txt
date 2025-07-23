@@ -143,6 +143,24 @@ if(BUILD_RENDERER_GL2)
     target_compile_options(${RENDERER_GL2_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
 endif()
 
+function(set_output_dirs TARGET SUBDIR)
+    if(CMAKE_CONFIGURATION_TYPES)  # Multi-config
+        set(CONFIGS ${CMAKE_CONFIGURATION_TYPES})
+    else()  # Single-config
+        set(CONFIGS ${CMAKE_BUILD_TYPE})
+    endif()
+
+    foreach(CONFIG ${CONFIGS})
+        string(TOUPPER "${CONFIG}" CONFIG_UPPER)
+
+        set_target_properties(${TARGET} PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${SUBDIR}"
+            RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${SUBDIR}"
+            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${SUBDIR}"
+        )
+    endforeach()
+endfunction()
+
 if(BUILD_GAME_LIBRARIES OR BUILD_GAME_QVMS)
     set(CGAME_SOURCES_BASEGAME ${CGAME_SOURCES} ${GAME_MODULE_SHARED_SOURCES})
     set(GAME_SOURCES_BASEGAME ${GAME_SOURCES} ${GAME_MODULE_SHARED_SOURCES})
@@ -152,34 +170,29 @@ endif()
 if(BUILD_GAME_LIBRARIES)
     add_library(${CGAME_MODULE_BINARY_BASEGAME} SHARED ${CGAME_SOURCES_BASEGAME} ${CGAME_BINARY_SOURCES})
     target_compile_definitions(${CGAME_MODULE_BINARY_BASEGAME} PRIVATE CGAME)
-    set_target_properties(${CGAME_MODULE_BINARY_BASEGAME} PROPERTIES
-        OUTPUT_NAME "${CGAME_MODULE_BINARY}"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${BASEGAME}")
+    set_target_properties(${CGAME_MODULE_BINARY_BASEGAME} PROPERTIES OUTPUT_NAME "${CGAME_MODULE_BINARY}")
+    set_output_dirs(${CGAME_MODULE_BINARY_BASEGAME} ${BASEGAME})
 
     add_library(${GAME_MODULE_BINARY_BASEGAME} SHARED ${GAME_SOURCES_BASEGAME} ${GAME_BINARY_SOURCES})
     target_compile_definitions(${GAME_MODULE_BINARY_BASEGAME} PRIVATE QAGAME)
-    set_target_properties(${GAME_MODULE_BINARY_BASEGAME} PROPERTIES
-        OUTPUT_NAME "${GAME_MODULE_BINARY}"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${BASEGAME}")
+    set_target_properties(${GAME_MODULE_BINARY_BASEGAME} PROPERTIES OUTPUT_NAME "${GAME_MODULE_BINARY}")
+    set_output_dirs(${GAME_MODULE_BINARY_BASEGAME} ${BASEGAME})
 
     add_library(${UI_MODULE_BINARY_BASEGAME} SHARED ${UI_SOURCES_BASEGAME} ${UI_BINARY_SOURCES})
     target_compile_definitions(${UI_MODULE_BINARY_BASEGAME} PRIVATE UI)
-    set_target_properties(${UI_MODULE_BINARY_BASEGAME} PROPERTIES
-        OUTPUT_NAME "${UI_MODULE_BINARY}"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${BASEGAME}")
+    set_target_properties(${UI_MODULE_BINARY_BASEGAME} PROPERTIES OUTPUT_NAME "${UI_MODULE_BINARY}")
+    set_output_dirs(${UI_MODULE_BINARY_BASEGAME} ${BASEGAME})
 endif()
 
 if(BUILD_GAME_QVMS)
-    set(TOOLS_DIR "${CMAKE_BINARY_DIR}/tools")
-    
     add_executable(q3asm ${Q3ASM_SOURCES})
-    set_target_properties(q3asm PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TOOLS_DIR})
+    set_output_dirs(q3asm tools)
     add_executable(q3lcc ${Q3LCC_SOURCES})
-    set_target_properties(q3lcc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TOOLS_DIR})
+    set_output_dirs(q3lcc tools)
 
     add_executable(lburg ${LBURG_SOURCES})
-    set_target_properties(lburg PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TOOLS_DIR})
-    set(DAGCHECK_C "${TOOLS_DIR}/dagcheck.c")
+    set_output_dirs(lburg tools)
+    set(DAGCHECK_C "${CMAKE_BINARY_DIR}/$<CONFIG>/tools/dagcheck.c")
     add_custom_command(
         OUTPUT ${DAGCHECK_C}
         COMMAND lburg ${Q3RCC_DAGCHECK_SOURCE} ${DAGCHECK_C}
@@ -187,20 +200,19 @@ if(BUILD_GAME_QVMS)
     )
 
     add_executable(q3rcc ${Q3RCC_SOURCES} ${DAGCHECK_C})
-    set_target_properties(q3rcc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TOOLS_DIR})
+    set_output_dirs(q3rcc tools)
     target_include_directories(q3rcc PUBLIC ${SOURCE_DIR}/tools/lcc/src)
 
     add_executable(q3cpp ${Q3CPP_SOURCES})
-    set_target_properties(q3cpp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TOOLS_DIR})
+    set_output_dirs(q3cpp tools)
 
     function(add_qvm MODULE_NAME)
         list(REMOVE_AT ARGV 0)
         cmake_parse_arguments(ARG "" "" "DEFINITIONS;OUTPUT_NAME;OUTPUT_DIRECTORY;SOURCES" ${ARGV})
 
+        set(QVM_OUTPUT_DIR "${CMAKE_BINARY_DIR}/$<CONFIG>")
         if(ARG_OUTPUT_DIRECTORY)
-            set(QVM_OUTPUT_DIR "${ARG_OUTPUT_DIRECTORY}")
-        else()
-            set(QVM_OUTPUT_DIR "${CMAKE_BINARY_DIR}")
+            set(QVM_OUTPUT_DIR "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_DIRECTORY}")
         endif()
 
         if(ARG_OUTPUT_NAME)
@@ -210,7 +222,6 @@ if(BUILD_GAME_QVMS)
         endif()
 
         set(QVM_ASM_DIR "${QVM_OUTPUT_DIR}/${MODULE_NAME}.qvm.dir")
-        file(MAKE_DIRECTORY ${QVM_ASM_DIR})
 
         set(LCC_FLAGS "")
         foreach(DEFINITION IN LISTS ARG_DEFINITIONS)
@@ -226,13 +237,13 @@ if(BUILD_GAME_QVMS)
 
             get_filename_component(BASE_FILE ${SOURCE} NAME_WE)
             set(ASM_FILE ${QVM_ASM_DIR}/${BASE_FILE}.asm)
-            string(REPLACE "${CMAKE_BINARY_DIR}/" "" ASM_FILE_MESSAGE "${ASM_FILE}")
+            string(REPLACE "${CMAKE_BINARY_DIR}/" "" ASM_FILE_COMMENT "${ASM_FILE}")
 
             add_custom_command(
                 OUTPUT ${ASM_FILE}
                 COMMAND q3lcc ${LCC_FLAGS} -o ${ASM_FILE} ${SOURCE}
                 DEPENDS ${SOURCE} q3lcc q3rcc q3cpp
-                COMMENT "Building C object ${ASM_FILE_MESSAGE}"
+                COMMENT "Building C object ${ASM_FILE_COMMENT}"
             )
 
             list(APPEND ASM_FILES ${ASM_FILE})
@@ -254,21 +265,21 @@ if(BUILD_GAME_QVMS)
     add_qvm(${CGAME_MODULE_QVM_BASEGAME}
         DEFINITIONS CGAME
         OUTPUT_NAME "${CGAME_MODULE_QVM}"
-        OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${BASEGAME}/vm"
+        OUTPUT_DIRECTORY "${BASEGAME}/vm"
         SOURCES ${CGAME_SOURCES_BASEGAME} ${CGAME_QVM_SOURCES}
     )
 
     add_qvm(${GAME_MODULE_QVM_BASEGAME}
         DEFINITIONS QAGAME
         OUTPUT_NAME "${GAME_MODULE_QVM}"
-        OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${BASEGAME}/vm"
+        OUTPUT_DIRECTORY "${BASEGAME}/vm"
         SOURCES ${GAME_SOURCES_BASEGAME} ${GAME_QVM_SOURCES}
     )
 
     add_qvm(${UI_MODULE_QVM_BASEGAME}
         DEFINITIONS UI
         OUTPUT_NAME "${UI_MODULE_QVM}"
-        OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${BASEGAME}/vm"
+        OUTPUT_DIRECTORY "${BASEGAME}/vm"
         SOURCES ${UI_SOURCES_BASEGAME} ${UI_QVM_SOURCES}
     )
 endif()
