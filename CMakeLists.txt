@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 include(cmake/names.cmake)
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C)
 
@@ -66,6 +66,33 @@ set(COMMON_LIBS dl m)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SDL2 REQUIRED sdl2)
 
+function(set_output_dirs TARGET)
+    list(REMOVE_AT ARGV 0)
+    cmake_parse_arguments(ARG "" "" "SUBDIRECTORY" ${ARGV})
+
+    if(CMAKE_CONFIGURATION_TYPES)  # Multi-config
+        set(CONFIGS ${CMAKE_CONFIGURATION_TYPES})
+    else()  # Single-config
+        set(CONFIGS ${CMAKE_BUILD_TYPE})
+    endif()
+
+    foreach(CONFIG ${CONFIGS})
+        string(TOUPPER "${CONFIG}" CONFIG_UPPER)
+
+        set_target_properties(${TARGET} PROPERTIES
+            if(ARG_SUBDIRECTORY)
+                LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}"
+                RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}"
+                ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}"
+            else()
+                LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}"
+                RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}"
+                ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}"
+            endif()
+        )
+    endforeach()
+endfunction()
+
 if(BUILD_SERVER)
     set(SERVER_BINARY_SOURCES
         ${SERVER_SOURCES}
@@ -83,6 +110,7 @@ if(BUILD_SERVER)
         DEDICATED
         BOTLIB
     )
+    set_output_dirs(${SERVER_BINARY})
 endif()
 
 if(BUILD_CLIENT)
@@ -107,6 +135,7 @@ if(BUILD_CLIENT)
     target_link_libraries(${CLIENT_BINARY} ${SDL2_LIBRARIES})
     target_include_directories(${CLIENT_BINARY} PUBLIC ${SDL2_INCLUDE_DIRS})
     target_compile_options(${CLIENT_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    set_output_dirs(${CLIENT_BINARY})
 endif()
 
 if(BUILD_RENDERER_GL1)
@@ -124,6 +153,7 @@ if(BUILD_RENDERER_GL1)
     target_link_libraries(${RENDERER_GL1_BINARY} ${SDL2_LIBRARIES})
     target_include_directories(${RENDERER_GL1_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f ${SDL2_INCLUDE_DIRS})
     target_compile_options(${RENDERER_GL1_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    set_output_dirs(${RENDERER_GL1_BINARY})
 endif()
 
 if(BUILD_RENDERER_GL2)
@@ -141,25 +171,8 @@ if(BUILD_RENDERER_GL2)
     target_link_libraries(${RENDERER_GL2_BINARY} ${SDL2_LIBRARIES})
     target_include_directories(${RENDERER_GL2_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f ${SDL2_INCLUDE_DIRS})
     target_compile_options(${RENDERER_GL2_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    set_output_dirs(${RENDERER_GL2_BINARY})
 endif()
-
-function(set_output_dirs TARGET SUBDIR)
-    if(CMAKE_CONFIGURATION_TYPES)  # Multi-config
-        set(CONFIGS ${CMAKE_CONFIGURATION_TYPES})
-    else()  # Single-config
-        set(CONFIGS ${CMAKE_BUILD_TYPE})
-    endif()
-
-    foreach(CONFIG ${CONFIGS})
-        string(TOUPPER "${CONFIG}" CONFIG_UPPER)
-
-        set_target_properties(${TARGET} PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${SUBDIR}"
-            RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${SUBDIR}"
-            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${CMAKE_BINARY_DIR}/${CONFIG}/${SUBDIR}"
-        )
-    endforeach()
-endfunction()
 
 if(BUILD_GAME_LIBRARIES OR BUILD_GAME_QVMS)
     set(CGAME_SOURCES_BASEGAME ${CGAME_SOURCES} ${GAME_MODULE_SHARED_SOURCES})
@@ -171,27 +184,27 @@ if(BUILD_GAME_LIBRARIES)
     add_library(${CGAME_MODULE_BINARY_BASEGAME} SHARED ${CGAME_SOURCES_BASEGAME} ${CGAME_BINARY_SOURCES})
     target_compile_definitions(${CGAME_MODULE_BINARY_BASEGAME} PRIVATE CGAME)
     set_target_properties(${CGAME_MODULE_BINARY_BASEGAME} PROPERTIES OUTPUT_NAME "${CGAME_MODULE_BINARY}")
-    set_output_dirs(${CGAME_MODULE_BINARY_BASEGAME} ${BASEGAME})
+    set_output_dirs(${CGAME_MODULE_BINARY_BASEGAME} SUBDIRECTORY ${BASEGAME})
 
     add_library(${GAME_MODULE_BINARY_BASEGAME} SHARED ${GAME_SOURCES_BASEGAME} ${GAME_BINARY_SOURCES})
     target_compile_definitions(${GAME_MODULE_BINARY_BASEGAME} PRIVATE QAGAME)
     set_target_properties(${GAME_MODULE_BINARY_BASEGAME} PROPERTIES OUTPUT_NAME "${GAME_MODULE_BINARY}")
-    set_output_dirs(${GAME_MODULE_BINARY_BASEGAME} ${BASEGAME})
+    set_output_dirs(${GAME_MODULE_BINARY_BASEGAME} SUBDIRECTORY ${BASEGAME})
 
     add_library(${UI_MODULE_BINARY_BASEGAME} SHARED ${UI_SOURCES_BASEGAME} ${UI_BINARY_SOURCES})
     target_compile_definitions(${UI_MODULE_BINARY_BASEGAME} PRIVATE UI)
     set_target_properties(${UI_MODULE_BINARY_BASEGAME} PROPERTIES OUTPUT_NAME "${UI_MODULE_BINARY}")
-    set_output_dirs(${UI_MODULE_BINARY_BASEGAME} ${BASEGAME})
+    set_output_dirs(${UI_MODULE_BINARY_BASEGAME} SUBDIRECTORY ${BASEGAME})
 endif()
 
 if(BUILD_GAME_QVMS)
     add_executable(q3asm ${Q3ASM_SOURCES})
-    set_output_dirs(q3asm tools)
+    set_output_dirs(q3asm SUBDIRECTORY tools)
     add_executable(q3lcc ${Q3LCC_SOURCES})
-    set_output_dirs(q3lcc tools)
+    set_output_dirs(q3lcc SUBDIRECTORY tools)
 
     add_executable(lburg ${LBURG_SOURCES})
-    set_output_dirs(lburg tools)
+    set_output_dirs(lburg SUBDIRECTORY tools)
     set(DAGCHECK_C "${CMAKE_BINARY_DIR}/$<CONFIG>/tools/dagcheck.c")
     add_custom_command(
         OUTPUT ${DAGCHECK_C}
@@ -200,11 +213,11 @@ if(BUILD_GAME_QVMS)
     )
 
     add_executable(q3rcc ${Q3RCC_SOURCES} ${DAGCHECK_C})
-    set_output_dirs(q3rcc tools)
+    set_output_dirs(q3rcc SUBDIRECTORY tools)
     target_include_directories(q3rcc PUBLIC ${SOURCE_DIR}/tools/lcc/src)
 
     add_executable(q3cpp ${Q3CPP_SOURCES})
-    set_output_dirs(q3cpp tools)
+    set_output_dirs(q3cpp SUBDIRECTORY tools)
 
     function(add_qvm MODULE_NAME)
         list(REMOVE_AT ARGV 0)
@@ -214,6 +227,10 @@ if(BUILD_GAME_QVMS)
         if(ARG_OUTPUT_DIRECTORY)
             set(QVM_OUTPUT_DIR "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_DIRECTORY}")
         endif()
+        add_custom_command(PRE_BUILD
+            OUTPUT "${QVM_OUTPUT_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_OUTPUT_DIR}"
+        )
 
         if(ARG_OUTPUT_NAME)
             set(QVM_FILE "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_NAME}.qvm")
@@ -221,7 +238,11 @@ if(BUILD_GAME_QVMS)
             set(QVM_FILE "${QVM_OUTPUT_DIR}/${MODULE_NAME}.qvm")
         endif()
 
-        set(QVM_ASM_DIR "${QVM_OUTPUT_DIR}/${MODULE_NAME}.qvm.dir")
+        set(QVM_ASM_DIR "${CMAKE_BINARY_DIR}/qvm.dir/${MODULE_NAME}")
+        add_custom_command(PRE_BUILD
+            OUTPUT "${QVM_ASM_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_ASM_DIR}"
+        )
 
         set(LCC_FLAGS "")
         foreach(DEFINITION IN LISTS ARG_DEFINITIONS)
@@ -242,7 +263,7 @@ if(BUILD_GAME_QVMS)
             add_custom_command(
                 OUTPUT ${ASM_FILE}
                 COMMAND q3lcc ${LCC_FLAGS} -o ${ASM_FILE} ${SOURCE}
-                DEPENDS ${SOURCE} q3lcc q3rcc q3cpp
+                DEPENDS ${SOURCE} ${QVM_ASM_DIR} q3lcc q3rcc q3cpp
                 COMMENT "Building C object ${ASM_FILE_COMMENT}"
             )
 
@@ -253,7 +274,7 @@ if(BUILD_GAME_QVMS)
         add_custom_command(
             OUTPUT ${QVM_FILE}
             COMMAND q3asm -o ${QVM_FILE} ${ASM_FILES}
-            DEPENDS ${ASM_FILES} q3asm
+            DEPENDS ${ASM_FILES} ${QVM_OUTPUT_DIR} q3asm
             COMMENT "Linking C QVM library ${QVM_FILE_COMMENT}"
         )
 
