@@ -66,6 +66,10 @@ add_compile_definitions(
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 include(cmake/sources.cmake)
 
+# FIXME internal libs only
+include_directories("${SOURCE_DIR}/zlib-1.3.1")
+add_compile_definitions(NO_GZIP)
+
 set(COMMON_LIBS dl m)
 
 find_package(PkgConfig REQUIRED)
