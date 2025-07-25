@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 include(cmake/names.cmake)
-project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C ASM)
+project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C ASM OBJC)
 
 option(BUILD_SERVER "Build dedicated server" ON)
 option(BUILD_CLIENT "Build client" ON)
@@ -71,14 +71,20 @@ add_compile_definitions(NO_GZIP)
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     include(cmake/msvc.cmake)
-elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "^(Apple)?Clang$")
     include(cmake/gnu.cmake)
 endif()
 
 if(WIN32)
     include(cmake/windows.cmake)
-else()
+endif()
+
+if(UNIX)
     include(cmake/unix.cmake)
+endif()
+
+if(APPLE)
+    include(cmake/macos.cmake)
 endif()
 
 include(cmake/sources.cmake)
