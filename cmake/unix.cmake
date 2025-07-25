@@ -9,7 +9,7 @@ set(CLIENT_PLATFORM_SOURCES
     ${SOURCE_DIR}/client/cl_http_curl.c
 )
 
-set(COMMON_LIBS dl m)
+list(APPEND COMMON_LIBS dl m)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SDL2 REQUIRED sdl2)
