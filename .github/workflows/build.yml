@@ -15,12 +15,21 @@ jobs:
       run: |
         cmake -S . -B build -G Ninja
         cmake --build build
-  windows:
-    name: Windows
+  windows-msvc:
+    name: Windows MSVC
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v4
     - name: Compile
       run: |
-        cmake -S . -B build
+        cmake -S . -B build -G "Visual Studio 17 2022"
+        cmake --build build
+  windows-mingw:
+    name: Windows MinGW
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compile
+      run: |
+        cmake -S . -B build -G "Ninja"
         cmake --build build
