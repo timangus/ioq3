@@ -12,4 +12,9 @@ set(CLIENT_PLATFORM_SOURCES
 list(APPEND COMMON_LIBS ws2_32 winmm psapi)
 
 set(SDL2_INCLUDE_DIRS "${SOURCE_DIR}/SDL2-2.32.8/include")
-set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/win64/SDL2main.lib ${SOURCE_DIR}/libs/win64/SDL2.lib)
+
+if(MINGW)
+    set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/win64/libSDL2main.a ${SOURCE_DIR}/libs/win64/libSDL2.dll.a)
+else()
+    set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/win64/SDL2main.lib ${SOURCE_DIR}/libs/win64/SDL2.lib)
+endif()
