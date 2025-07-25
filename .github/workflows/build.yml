@@ -33,3 +33,12 @@ jobs:
       run: |
         cmake -S . -B build -G "Ninja"
         cmake --build build
+  macos:
+    name: macOS
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compile
+      run: |
+        cmake -S . -B build -G "Ninja"
+        cmake --build build
