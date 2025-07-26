@@ -1,5 +1,9 @@
 # MSVC compiler specific settings
 
+if(NOT CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    return()
+endif()
+
 enable_language(ASM_MASM)
 
 add_compile_options("$<$<COMPILE_LANGUAGE:C>:/wd4267>")

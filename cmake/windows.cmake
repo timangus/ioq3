@@ -1,5 +1,9 @@
 # Windows specific settings
 
+if(NOT WIN32)
+    return()
+endif()
+
 list(APPEND SYSTEM_PLATFORM_SOURCES
     ${SOURCE_DIR}/sys/sys_win32.c
     ${SOURCE_DIR}/sys/con_passive.c

@@ -37,6 +37,22 @@ else()
     set(ARCH "unknown")
 endif()
 
+add_compile_definitions(
+    ARCH_STRING="${ARCH}"
+    PRODUCT_VERSION="${PRODUCT_VERSION}"
+)
+
+set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
+
+include(cmake/msvc.cmake)
+include(cmake/gnu.cmake)
+
+include(cmake/windows.cmake)
+include(cmake/unix.cmake)
+include(cmake/macos.cmake)
+
+include(cmake/sources.cmake)
+
 set(SERVER_BINARY "${SERVER_NAME}.${ARCH}")
 set(CLIENT_BINARY "${CLIENT_NAME}.${ARCH}")
 
@@ -58,36 +74,9 @@ set(UI_MODULE_BINARY_BASEGAME "${UI_MODULE_BINARY}_${BASEGAME}")
 set(UI_MODULE_QVM "${UI_MODULE}qvm")
 set(UI_MODULE_QVM_BASEGAME "${UI_MODULE_QVM}_${BASEGAME}")
 
-add_compile_definitions(
-    ARCH_STRING="${ARCH}"
-    PRODUCT_VERSION="${PRODUCT_VERSION}"
-)
-
-set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
-
 # FIXME internal libs only
 include_directories("${SOURCE_DIR}/zlib-1.3.1")
 add_compile_definitions(NO_GZIP)
-
-if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    include(cmake/msvc.cmake)
-elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "^(Apple)?Clang$")
-    include(cmake/gnu.cmake)
-endif()
-
-if(WIN32)
-    include(cmake/windows.cmake)
-endif()
-
-if(UNIX)
-    include(cmake/unix.cmake)
-endif()
-
-if(APPLE)
-    include(cmake/macos.cmake)
-endif()
-
-include(cmake/sources.cmake)
 
 function(set_output_dirs TARGET)
     list(REMOVE_AT ARGV 0)

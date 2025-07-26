@@ -1,5 +1,9 @@
 # macOS specific settings
 
+if(NOT APPLE)
+    return()
+endif()
+
 enable_language(OBJC)
 
 list(APPEND SYSTEM_PLATFORM_SOURCES
