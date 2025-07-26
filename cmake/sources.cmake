@@ -388,6 +388,3 @@ set(LBURG_SOURCES
     ${SOURCE_DIR}/tools/lcc/lburg/lburg.c
     ${SOURCE_DIR}/tools/lcc/lburg/gram.c
 )
-
-file(GLOB ZLIB_SOURCES "${SOURCE_DIR}/zlib-1.3.1/*.c")
-file(GLOB JPEG_SOURCES "${SOURCE_DIR}/jpeg-9f/j*.c")

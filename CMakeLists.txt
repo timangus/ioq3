@@ -9,6 +9,10 @@ option(BUILD_RENDERER_GL2 "Build GL2 renderer" ON)
 option(BUILD_GAME_LIBRARIES "Build game module libraries" ON)
 option(BUILD_GAME_QVMS "Build game module qvms" ON)
 
+option(USE_INTERNAL_LIBS "Use internally packaged libraries" ON)
+option(USE_INTERNAL_ZLIB "Use internal copy of zlib" ${USE_INTERNAL_LIBS})
+option(USE_INTERNAL_JPEG "Use internal copy of libjpeg" ${USE_INTERNAL_LIBS})
+
 # Release build by default, set externally if you want something else
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -53,6 +57,8 @@ include(cmake/macos.cmake)
 
 include(cmake/sources.cmake)
 
+include(cmake/libraries.cmake)
+
 set(SERVER_BINARY "${SERVER_NAME}.${ARCH}")
 set(CLIENT_BINARY "${CLIENT_NAME}.${ARCH}")
 
@@ -73,10 +79,6 @@ set(UI_MODULE_BINARY "${UI_MODULE}${ARCH}")
 set(UI_MODULE_BINARY_BASEGAME "${UI_MODULE_BINARY}_${BASEGAME}")
 set(UI_MODULE_QVM "${UI_MODULE}qvm")
 set(UI_MODULE_QVM_BASEGAME "${UI_MODULE_QVM}_${BASEGAME}")
-
-# FIXME internal libs only
-include_directories("${SOURCE_DIR}/zlib-1.3.1")
-add_compile_definitions(NO_GZIP)
 
 function(set_output_dirs TARGET)
     list(REMOVE_AT ARGV 0)
@@ -117,10 +119,12 @@ if(BUILD_SERVER)
     )
 
     add_executable(${SERVER_BINARY} ${SERVER_BINARY_SOURCES})
-    target_link_libraries(${SERVER_BINARY} ${COMMON_LIBS})
+    target_include_directories(${SERVER_BINARY} PRIVATE ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(${SERVER_BINARY} ${COMMON_LIBS} ${ZLIB_LIBRARIES})
     target_compile_definitions(${SERVER_BINARY} PRIVATE
         DEDICATED
         BOTLIB
+        ${ZLIB_DEFINITIONS}
     )
     set_output_dirs(${SERVER_BINARY})
 endif()
@@ -138,10 +142,12 @@ if(BUILD_CLIENT)
     )
 
     add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
-    target_link_libraries(${CLIENT_BINARY} ${COMMON_LIBS})
+    target_include_directories(${CLIENT_BINARY} PRIVATE ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(${CLIENT_BINARY} ${COMMON_LIBS} ${ZLIB_LIBRARIES})
     target_compile_definitions(${CLIENT_BINARY} PRIVATE
         BOTLIB
         USE_RENDERER_DLOPEN
+        ${ZLIB_DEFINITIONS}
     )
 
     target_link_libraries(${CLIENT_BINARY} ${SDL2_LIBRARIES})
@@ -161,9 +167,9 @@ if(BUILD_RENDERER_GL1)
 
     add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
 
-    target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE USE_INTERNAL_JPEG USE_RENDERER_DLOPEN)
-    target_link_libraries(${RENDERER_GL1_BINARY} ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL1_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f ${SDL2_INCLUDE_DIRS})
+    target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE ${JPEG_DEFINITIONS} USE_RENDERER_DLOPEN)
+    target_link_libraries(${RENDERER_GL1_BINARY} ${JPEG_LIBRARIES} ${SDL2_LIBRARIES})
+    target_include_directories(${RENDERER_GL1_BINARY} PUBLIC ${JPEG_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
     target_compile_options(${RENDERER_GL1_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
     set_output_dirs(${RENDERER_GL1_BINARY})
 endif()
@@ -203,9 +209,9 @@ if(BUILD_RENDERER_GL2)
 
     add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
 
-    target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE USE_INTERNAL_JPEG USE_RENDERER_DLOPEN)
-    target_link_libraries(${RENDERER_GL2_BINARY} ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL2_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f ${SDL2_INCLUDE_DIRS})
+    target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE ${JPEG_DEFINITIONS} USE_RENDERER_DLOPEN)
+    target_link_libraries(${RENDERER_GL2_BINARY} ${JPEG_LIBRARIES} ${SDL2_LIBRARIES})
+    target_include_directories(${RENDERER_GL2_BINARY} PUBLIC ${JPEG_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
     target_compile_options(${RENDERER_GL2_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
     set_output_dirs(${RENDERER_GL2_BINARY})
 endif()
