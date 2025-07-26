@@ -11,6 +11,6 @@ list(APPEND CLIENT_PLATFORM_SOURCES
 
 list(APPEND COMMON_LIBS dl m)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SDL2 REQUIRED sdl2)
-message("SDL2 variables ${SDL2_INCLUDE_DIRS} ${SDL2_LIBRARIES} ${SDL2_LIBRARY_DIRS} ${SDL2_CFLAGS} ${SDL2_LDFLAGS}")
+find_package(SDL2 REQUIRED)
+#pkg_check_modules(SDL2 REQUIRED sdl2)
+#message("SDL2 variables ${SDL2_INCLUDE_DIRS} ${SDL2_LIBRARIES} ${SDL2_LIBRARY_DIRS} ${SDL2_CFLAGS} ${SDL2_LDFLAGS}")

@@ -149,15 +149,12 @@ if(BUILD_CLIENT)
     )
 
     add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
-    target_link_libraries(${CLIENT_BINARY} ${COMMON_LIBS})
+    target_link_libraries(${CLIENT_BINARY} ${COMMON_LIBS} SDL2::SDL2)
     target_compile_definitions(${CLIENT_BINARY} PRIVATE
         BOTLIB
         USE_RENDERER_DLOPEN
     )
 
-    target_link_libraries(${CLIENT_BINARY} ${SDL2_LIBRARIES})
-    target_include_directories(${CLIENT_BINARY} PUBLIC ${SDL2_INCLUDE_DIRS})
-    target_compile_options(${CLIENT_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
     set_output_dirs(${CLIENT_BINARY})
 endif()
 
@@ -173,9 +170,8 @@ if(BUILD_RENDERER_GL1)
     add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
 
     target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE USE_INTERNAL_JPEG USE_RENDERER_DLOPEN)
-    target_link_libraries(${RENDERER_GL1_BINARY} ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL1_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f ${SDL2_INCLUDE_DIRS})
-    target_compile_options(${RENDERER_GL1_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    target_link_libraries(${RENDERER_GL1_BINARY} PRIVATE SDL2::SDL2)
+    target_include_directories(${RENDERER_GL1_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f)
     set_output_dirs(${RENDERER_GL1_BINARY})
 endif()
 
@@ -215,9 +211,8 @@ if(BUILD_RENDERER_GL2)
     add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
 
     target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE USE_INTERNAL_JPEG USE_RENDERER_DLOPEN)
-    target_link_libraries(${RENDERER_GL2_BINARY} ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL2_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f ${SDL2_INCLUDE_DIRS})
-    target_compile_options(${RENDERER_GL2_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    target_link_libraries(${RENDERER_GL2_BINARY} PRIVATE SDL2::SDL2)
+    target_include_directories(${RENDERER_GL2_BINARY} PUBLIC ${SOURCE_DIR}/jpeg-9f)
     set_output_dirs(${RENDERER_GL2_BINARY})
 endif()
 
