@@ -119,8 +119,11 @@ if(BUILD_SERVER)
     )
 
     add_executable(${SERVER_BINARY} ${SERVER_BINARY_SOURCES})
-    target_include_directories(${SERVER_BINARY} PRIVATE ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(${SERVER_BINARY} ${COMMON_LIBS} ${ZLIB_LIBRARIES})
+    target_include_directories(${SERVER_BINARY} PRIVATE
+        ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(${SERVER_BINARY}
+        ${COMMON_LIBS}
+        ${ZLIB_LIBRARIES})
     target_compile_definitions(${SERVER_BINARY} PRIVATE
         DEDICATED
         BOTLIB
@@ -142,17 +145,20 @@ if(BUILD_CLIENT)
     )
 
     add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
-    target_include_directories(${CLIENT_BINARY} PRIVATE ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(${CLIENT_BINARY} ${COMMON_LIBS} ${ZLIB_LIBRARIES})
+    target_include_directories(${CLIENT_BINARY} PRIVATE
+        ${ZLIB_INCLUDE_DIRS}
+        ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${CLIENT_BINARY}
+        ${COMMON_LIBS}
+        ${ZLIB_LIBRARIES}
+        ${SDL2_LIBRARIES})
     target_compile_definitions(${CLIENT_BINARY} PRIVATE
         BOTLIB
         USE_RENDERER_DLOPEN
         ${ZLIB_DEFINITIONS}
     )
-
-    target_link_libraries(${CLIENT_BINARY} ${SDL2_LIBRARIES})
-    target_include_directories(${CLIENT_BINARY} PUBLIC ${SDL2_INCLUDE_DIRS})
-    target_compile_options(${CLIENT_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    target_compile_options(${CLIENT_BINARY} PRIVATE
+        ${SDL2_CFLAGS_OTHER})
     set_output_dirs(${CLIENT_BINARY})
 endif()
 
@@ -167,10 +173,17 @@ if(BUILD_RENDERER_GL1)
 
     add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
 
-    target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE ${JPEG_DEFINITIONS} USE_RENDERER_DLOPEN)
-    target_link_libraries(${RENDERER_GL1_BINARY} ${JPEG_LIBRARIES} ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL1_BINARY} PUBLIC ${JPEG_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
-    target_compile_options(${RENDERER_GL1_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    target_link_libraries(${RENDERER_GL1_BINARY}
+        ${JPEG_LIBRARIES}
+        ${SDL2_LIBRARIES})
+    target_include_directories(${RENDERER_GL1_BINARY} PRIVATE
+        ${JPEG_INCLUDE_DIRS}
+        ${SDL2_INCLUDE_DIRS})
+    target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE
+        ${JPEG_DEFINITIONS}
+        USE_RENDERER_DLOPEN)
+    target_compile_options(${RENDERER_GL1_BINARY} PRIVATE
+        ${SDL2_CFLAGS_OTHER})
     set_output_dirs(${RENDERER_GL1_BINARY})
 endif()
 
@@ -209,10 +222,17 @@ if(BUILD_RENDERER_GL2)
 
     add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
 
-    target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE ${JPEG_DEFINITIONS} USE_RENDERER_DLOPEN)
-    target_link_libraries(${RENDERER_GL2_BINARY} ${JPEG_LIBRARIES} ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL2_BINARY} PUBLIC ${JPEG_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
-    target_compile_options(${RENDERER_GL2_BINARY} PUBLIC ${SDL2_CFLAGS_OTHER})
+    target_link_libraries(${RENDERER_GL2_BINARY}
+        ${JPEG_LIBRARIES}
+        ${SDL2_LIBRARIES})
+    target_include_directories(${RENDERER_GL2_BINARY} PRIVATE
+        ${JPEG_INCLUDE_DIRS}
+        ${SDL2_INCLUDE_DIRS})
+    target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE
+        ${JPEG_DEFINITIONS}
+        USE_RENDERER_DLOPEN)
+    target_compile_options(${RENDERER_GL2_BINARY} PRIVATE
+        ${SDL2_CFLAGS_OTHER})
     set_output_dirs(${RENDERER_GL2_BINARY})
 endif()
 
@@ -257,7 +277,7 @@ if(BUILD_GAME_QVMS)
 
     add_executable(q3rcc ${Q3RCC_SOURCES} ${DAGCHECK_C})
     set_output_dirs(q3rcc SUBDIRECTORY tools)
-    target_include_directories(q3rcc PUBLIC ${SOURCE_DIR}/tools/lcc/src)
+    target_include_directories(q3rcc PRIVATE ${SOURCE_DIR}/tools/lcc/src)
 
     add_executable(q3cpp ${Q3CPP_SOURCES})
     set_output_dirs(q3cpp SUBDIRECTORY tools)
