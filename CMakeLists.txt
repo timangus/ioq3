@@ -13,6 +13,8 @@ option(USE_INTERNAL_LIBS "Use internally packaged libraries" ON)
 option(USE_INTERNAL_ZLIB "Use internal copy of zlib" ${USE_INTERNAL_LIBS})
 option(USE_INTERNAL_JPEG "Use internal copy of libjpeg" ${USE_INTERNAL_LIBS})
 
+option(USE_RENDERER_DLOPEN "Dynamically load the renderer(s)" ON)
+
 # Release build by default, set externally if you want something else
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -51,6 +53,13 @@ list(APPEND SERVER_DEFINITIONS "DEDICATED")
 list(APPEND SERVER_DEFINITIONS "BOTLIB")
 list(APPEND CLIENT_DEFINITIONS "BOTLIB")
 
+if(USE_RENDERER_DLOPEN)
+    list(APPEND CLIENT_DEFINITIONS USE_RENDERER_DLOPEN)
+    list(APPEND RENDERER_DEFINITIONS USE_RENDERER_DLOPEN)
+elseif(BUILD_RENDERER_GL1 AND BUILD_RENDERER_GL2)
+    message(FATAL_ERROR "Multiple static renderers enabled; choose one")
+endif()
+
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
 include(cmake/msvc.cmake)
@@ -63,6 +72,17 @@ include(cmake/macos.cmake)
 include(cmake/sources.cmake)
 
 include(cmake/libraries.cmake)
+
+set(RENDERER_LIBRARIES
+    ${JPEG_LIBRARIES}
+    ${SDL2_LIBRARIES})
+
+set(RENDERER_INCLUDE_DIRS
+    ${JPEG_INCLUDE_DIRS}
+    ${SDL2_INCLUDE_DIRS})
+
+set(RENDERER_DEFINITIONS ${JPEG_DEFINTIONS})
+set(RENDERER_FLAGS ${SDL2_CFLAGS_OTHER})
 
 set(SERVER_BINARY "${SERVER_NAME}.${ARCH}")
 set(CLIENT_BINARY "${CLIENT_NAME}.${ARCH}")
@@ -136,59 +156,24 @@ if(BUILD_SERVER)
     set_output_dirs(${SERVER_BINARY})
 endif()
 
-if(BUILD_CLIENT)
-    set(CLIENT_BINARY_SOURCES
-        ${SERVER_SOURCES}
-        ${CLIENT_SOURCES}
-        ${COMMON_SOURCES}
-        ${BOTLIB_SOURCES}
-        ${SYSTEM_SOURCES}
-        ${ASM_SOURCES}
-        ${ZLIB_SOURCES}
-        ${SDL_CLIENT_SOURCES}
-    )
-
-    add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
-    target_include_directories(${CLIENT_BINARY} PRIVATE
-        ${ZLIB_INCLUDE_DIRS}
-        ${SDL2_INCLUDE_DIRS})
-    target_link_libraries(${CLIENT_BINARY}
-        ${COMMON_LIBS}
-        ${ZLIB_LIBRARIES}
-        ${SDL2_LIBRARIES})
-    target_compile_definitions(${CLIENT_BINARY} PRIVATE
-        ${CLIENT_DEFINITIONS}
-        ${ZLIB_DEFINITIONS}
-        USE_RENDERER_DLOPEN
-    )
-    target_compile_options(${CLIENT_BINARY} PRIVATE
-        ${SDL2_CFLAGS_OTHER})
-    set_output_dirs(${CLIENT_BINARY})
-endif()
-
 if(BUILD_RENDERER_GL1)
     set(RENDERER_GL1_BINARY_SOURCES
         ${RENDERER_COMMON_SOURCES}
         ${RENDERER_GL1_SOURCES}
         ${SDL_RENDERER_SOURCES}
-        ${DYNAMIC_RENDERER_SOURCES}
         ${JPEG_SOURCES}
     )
 
-    add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
+    if(USE_RENDERER_DLOPEN)
+        list(APPEND RENDERER_GL1_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
 
-    target_link_libraries(${RENDERER_GL1_BINARY}
-        ${JPEG_LIBRARIES}
-        ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL1_BINARY} PRIVATE
-        ${JPEG_INCLUDE_DIRS}
-        ${SDL2_INCLUDE_DIRS})
-    target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE
-        ${JPEG_DEFINITIONS}
-        USE_RENDERER_DLOPEN)
-    target_compile_options(${RENDERER_GL1_BINARY} PRIVATE
-        ${SDL2_CFLAGS_OTHER})
-    set_output_dirs(${RENDERER_GL1_BINARY})
+        add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
+        target_link_libraries(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+        target_include_directories(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+        target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+        target_compile_options(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_FLAGS})
+        set_output_dirs(${RENDERER_GL1_BINARY})
+    endif()
 endif()
 
 if(BUILD_RENDERER_GL2)
@@ -220,24 +205,64 @@ if(BUILD_RENDERER_GL2)
         ${RENDERER_GL2_SOURCES}
         ${RENDERER_GL2_SHADER_C_SOURCES}
         ${SDL_RENDERER_SOURCES}
-        ${DYNAMIC_RENDERER_SOURCES}
         ${JPEG_SOURCES}
     )
 
-    add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
+    if(USE_RENDERER_DLOPEN)
+        list(APPEND RENDERER_GL2_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
 
-    target_link_libraries(${RENDERER_GL2_BINARY}
-        ${JPEG_LIBRARIES}
-        ${SDL2_LIBRARIES})
-    target_include_directories(${RENDERER_GL2_BINARY} PRIVATE
-        ${JPEG_INCLUDE_DIRS}
+        add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
+        target_link_libraries(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+        target_include_directories(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+        target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+        target_compile_options(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_FLAGS})
+        set_output_dirs(${RENDERER_GL2_BINARY})
+    endif()
+endif()
+
+if(BUILD_CLIENT)
+    set(CLIENT_BINARY_SOURCES
+        ${SERVER_SOURCES}
+        ${CLIENT_SOURCES}
+        ${COMMON_SOURCES}
+        ${BOTLIB_SOURCES}
+        ${SYSTEM_SOURCES}
+        ${ASM_SOURCES}
+        ${ZLIB_SOURCES}
+        ${SDL_CLIENT_SOURCES}
+    )
+
+    if(NOT USE_RENDERER_DLOPEN)
+        if(BUILD_RENDERER_GL1)
+            list(APPEND CLIENT_BINARY_SOURCES ${RENDERER_GL1_BINARY_SOURCES})
+        elseif(BUILD_RENDERER_GL2)
+            list(APPEND CLIENT_BINARY_SOURCES ${RENDERER_GL2_BINARY_SOURCES})
+        else()
+            message(FATAL_ERROR "No renderer selected")
+        endif()
+    endif()
+
+    add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
+    target_include_directories(${CLIENT_BINARY} PRIVATE
+        ${ZLIB_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS})
-    target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE
-        ${JPEG_DEFINITIONS}
-        USE_RENDERER_DLOPEN)
-    target_compile_options(${RENDERER_GL2_BINARY} PRIVATE
+    target_link_libraries(${CLIENT_BINARY} PRIVATE
+        ${COMMON_LIBS}
+        ${ZLIB_LIBRARIES}
+        ${SDL2_LIBRARIES})
+    target_compile_definitions(${CLIENT_BINARY} PRIVATE
+        ${CLIENT_DEFINITIONS}
+        ${ZLIB_DEFINITIONS})
+    target_compile_options(${CLIENT_BINARY} PRIVATE
         ${SDL2_CFLAGS_OTHER})
-    set_output_dirs(${RENDERER_GL2_BINARY})
+    set_output_dirs(${CLIENT_BINARY})
+
+    if(NOT USE_RENDERER_DLOPEN)
+        target_link_libraries(${CLIENT_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+        target_include_directories(${CLIENT_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+        target_compile_definitions(${CLIENT_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+        target_compile_options(${CLIENT_BINARY} PRIVATE ${RENDERER_FLAGS})
+    endif()
 endif()
 
 if(BUILD_GAME_LIBRARIES OR BUILD_GAME_QVMS)
