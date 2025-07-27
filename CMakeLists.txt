@@ -153,8 +153,7 @@ if(BUILD_SERVER)
         ${ZLIB_LIBRARIES})
     target_compile_definitions(${SERVER_BINARY} PRIVATE
         ${SERVER_DEFINITIONS}
-        ${ZLIB_DEFINITIONS}
-    )
+        ${ZLIB_DEFINITIONS})
     set_output_dirs(${SERVER_BINARY})
 endif()
 
