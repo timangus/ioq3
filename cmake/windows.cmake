@@ -19,3 +19,13 @@ list(APPEND COMMON_LIBRARIES ws2_32 winmm psapi)
 if(MINGW)
     list(APPEND COMMON_LIBRARIES mingw32)
 endif()
+
+# This is so the resource compiler can find the icon
+list(APPEND SERVER_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/misc)
+list(APPEND CLIENT_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/misc)
+
+if(MSVC)
+    # We have our own manifest, disable auto creation
+    list(APPEND SERVER_LINK_OPTIONS "/MANIFEST:NO")
+    list(APPEND CLIENT_LINK_OPTIONS "/MANIFEST:NO")
+endif()

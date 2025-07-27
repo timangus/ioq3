@@ -146,6 +146,7 @@ if(BUILD_SERVER)
 
     add_executable(${SERVER_BINARY} ${SERVER_BINARY_SOURCES})
     target_include_directories(${SERVER_BINARY} PRIVATE
+        ${SERVER_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS})
     target_link_libraries(${SERVER_BINARY}
         ${COMMON_LIBRARIES}
@@ -154,6 +155,8 @@ if(BUILD_SERVER)
     target_compile_definitions(${SERVER_BINARY} PRIVATE
         ${SERVER_DEFINITIONS}
         ${ZLIB_DEFINITIONS})
+    target_link_options(${SERVER_BINARY} PRIVATE
+        ${SERVER_LINK_OPTIONS})
     set_output_dirs(${SERVER_BINARY})
 endif()
 
@@ -173,6 +176,7 @@ if(BUILD_RENDERER_GL1)
         target_include_directories(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
         target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
         target_compile_options(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+        target_link_options(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
         set_output_dirs(${RENDERER_GL1_BINARY})
     endif()
 endif()
@@ -217,6 +221,7 @@ if(BUILD_RENDERER_GL2)
         target_include_directories(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
         target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
         target_compile_options(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+        target_link_options(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
         set_output_dirs(${RENDERER_GL2_BINARY})
     endif()
 endif()
@@ -245,6 +250,7 @@ if(BUILD_CLIENT)
 
     add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
     target_include_directories(${CLIENT_BINARY} PRIVATE
+        ${CLIENT_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${CLIENT_BINARY} PRIVATE
