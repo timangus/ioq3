@@ -1,3 +1,7 @@
+set(INTERNAL_SDL_DIR "${SOURCE_DIR}/SDL2-2.32.8")
+set(INTERNAL_ZLIB_DIR "${SOURCE_DIR}/zlib-1.3.1")
+set(INTERNAL_JPEG_DIR "${SOURCE_DIR}/jpeg-9f")
+
 function(find_include_dirs OUT_VAR)
     set(SOURCES ${ARGN})
 
@@ -35,7 +39,7 @@ function(find_include_dirs OUT_VAR)
 endfunction()
 
 if(USE_INTERNAL_ZLIB)
-    file(GLOB_RECURSE ZLIB_SOURCES "${SOURCE_DIR}/zlib-1.3.1/*.c")
+    file(GLOB_RECURSE ZLIB_SOURCES "${INTERNAL_ZLIB_DIR}/*.c")
     find_include_dirs(ZLIB_INCLUDE_DIRS "${ZLIB_SOURCES}")
     set(ZLIB_LIBRARIES "")
     set(ZLIB_DEFINITIONS "NO_GZIP")
@@ -44,7 +48,7 @@ else()
 endif()
 
 if(USE_INTERNAL_JPEG)
-    file(GLOB_RECURSE JPEG_SOURCES "${SOURCE_DIR}/jpeg-9f/j*.c")
+    file(GLOB_RECURSE JPEG_SOURCES "${INTERNAL_JPEG_DIR}/j*.c")
     find_include_dirs(JPEG_INCLUDE_DIRS "${JPEG_SOURCES}")
     set(JPEG_LIBRARIES "")
     set(JPEG_DEFINITIONS "USE_INTERNAL_JPEG")
@@ -59,7 +63,7 @@ endif()
 find_package(SDL2 ${SYSTEM_SDL_REQUIRED})
 
 if(NOT SDL2_FOUND)
-    set(SDL2_INCLUDE_DIRS "${SOURCE_DIR}/SDL2-2.32.8/include")
+    set(SDL2_INCLUDE_DIRS "${INTERNAL_SDL_DIR}/include")
 
     # On Windows and macOS we have internal SDL binaries we can use
     if(MINGW)
