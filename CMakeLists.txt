@@ -144,7 +144,9 @@ if(BUILD_SERVER)
         ${ZLIB_SOURCES}
     )
 
-    add_executable(${SERVER_BINARY} ${SERVER_BINARY_SOURCES})
+    add_executable(${SERVER_BINARY}
+        ${SERVER_EXECUTABLE_OPTIONS}
+        ${SERVER_BINARY_SOURCES})
     target_include_directories(${SERVER_BINARY} PRIVATE
         ${SERVER_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS})
@@ -248,7 +250,9 @@ if(BUILD_CLIENT)
         endif()
     endif()
 
-    add_executable(${CLIENT_BINARY} ${CLIENT_BINARY_SOURCES})
+    add_executable(${CLIENT_BINARY}
+        ${CLIENT_EXECUTABLE_OPTIONS}
+        ${CLIENT_BINARY_SOURCES})
     target_include_directories(${CLIENT_BINARY} PRIVATE
         ${CLIENT_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIRS}
