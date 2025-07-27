@@ -13,4 +13,4 @@ list(APPEND CLIENT_PLATFORM_SOURCES
     ${SOURCE_DIR}/client/cl_http_curl.c
 )
 
-list(APPEND COMMON_LIBS dl m)
+list(APPEND COMMON_LIBRARIES dl m)

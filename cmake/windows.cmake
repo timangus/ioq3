@@ -13,8 +13,8 @@ list(APPEND CLIENT_PLATFORM_SOURCES
     ${SOURCE_DIR}/client/cl_http_windows.c
 )
 
-list(APPEND COMMON_LIBS ws2_32 winmm psapi)
+list(APPEND COMMON_LIBRARIES ws2_32 winmm psapi)
 
 if(MINGW)
-    list(APPEND COMMON_LIBS mingw32)
+    list(APPEND COMMON_LIBRARIES mingw32)
 endif()

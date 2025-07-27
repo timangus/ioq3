@@ -73,16 +73,17 @@ include(cmake/sources.cmake)
 
 include(cmake/libraries.cmake)
 
-set(RENDERER_LIBRARIES
+list(APPEND RENDERER_LIBRARIES
+    ${COMMON_LIBRARIES}
     ${JPEG_LIBRARIES}
     ${SDL2_LIBRARIES})
 
-set(RENDERER_INCLUDE_DIRS
+list(APPEND RENDERER_INCLUDE_DIRS
     ${JPEG_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIRS})
 
-set(RENDERER_DEFINITIONS ${JPEG_DEFINTIONS})
-set(RENDERER_FLAGS ${SDL2_CFLAGS_OTHER})
+list(APPEND RENDERER_DEFINITIONS ${JPEG_DEFINTIONS})
+list(APPEND RENDERER_FLAGS ${SDL2_CFLAGS_OTHER})
 
 set(SERVER_BINARY "${SERVER_NAME}.${ARCH}")
 set(CLIENT_BINARY "${CLIENT_NAME}.${ARCH}")
@@ -147,7 +148,8 @@ if(BUILD_SERVER)
     target_include_directories(${SERVER_BINARY} PRIVATE
         ${ZLIB_INCLUDE_DIRS})
     target_link_libraries(${SERVER_BINARY}
-        ${COMMON_LIBS}
+        ${COMMON_LIBRARIES}
+        ${SERVER_LIBRARIES}
         ${ZLIB_LIBRARIES})
     target_compile_definitions(${SERVER_BINARY} PRIVATE
         ${SERVER_DEFINITIONS}
@@ -247,7 +249,8 @@ if(BUILD_CLIENT)
         ${ZLIB_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${CLIENT_BINARY} PRIVATE
-        ${COMMON_LIBS}
+        ${COMMON_LIBRARIES}
+        ${CLIENT_LIBRARIES}
         ${ZLIB_LIBRARIES}
         ${SDL2_LIBRARIES})
     target_compile_definitions(${CLIENT_BINARY} PRIVATE
