@@ -46,6 +46,11 @@ add_compile_definitions(
     PRODUCT_VERSION="${PRODUCT_VERSION}"
 )
 
+list(APPEND SERVER_DEFINITIONS "DEDICATED")
+
+list(APPEND SERVER_DEFINITIONS "BOTLIB")
+list(APPEND CLIENT_DEFINITIONS "BOTLIB")
+
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
 include(cmake/msvc.cmake)
@@ -125,8 +130,7 @@ if(BUILD_SERVER)
         ${COMMON_LIBS}
         ${ZLIB_LIBRARIES})
     target_compile_definitions(${SERVER_BINARY} PRIVATE
-        DEDICATED
-        BOTLIB
+        ${SERVER_DEFINITIONS}
         ${ZLIB_DEFINITIONS}
     )
     set_output_dirs(${SERVER_BINARY})
@@ -153,9 +157,9 @@ if(BUILD_CLIENT)
         ${ZLIB_LIBRARIES}
         ${SDL2_LIBRARIES})
     target_compile_definitions(${CLIENT_BINARY} PRIVATE
-        BOTLIB
-        USE_RENDERER_DLOPEN
+        ${CLIENT_DEFINITIONS}
         ${ZLIB_DEFINITIONS}
+        USE_RENDERER_DLOPEN
     )
     target_compile_options(${CLIENT_BINARY} PRIVATE
         ${SDL2_CFLAGS_OTHER})
