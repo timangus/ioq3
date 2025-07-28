@@ -1,5 +1,7 @@
 include(cmake/libraries/curl.cmake)
 include(cmake/libraries/jpeg.cmake)
+include(cmake/libraries/ogg.cmake)
 include(cmake/libraries/openal.cmake)
 include(cmake/libraries/sdl.cmake)
+include(cmake/libraries/vorbis.cmake)
 include(cmake/libraries/zlib.cmake)
