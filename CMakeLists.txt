@@ -54,15 +54,12 @@ add_compile_definitions(
 
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
-include(cmake/msvc.cmake)
-include(cmake/gnu.cmake)
+include(cmake/compilers/msvc.cmake)
+include(cmake/compilers/gnu.cmake)
 
-include(cmake/windows.cmake)
-include(cmake/unix.cmake)
-include(cmake/macos.cmake)
-
-include(cmake/utils.cmake)
-include(cmake/tools.cmake)
+include(cmake/platforms/windows.cmake)
+include(cmake/platforms/unix.cmake)
+include(cmake/platforms/macos.cmake)
 
 include(cmake/sources.cmake)
 
@@ -70,9 +67,7 @@ include(cmake/libraries.cmake)
 
 include(cmake/server.cmake)
 include(cmake/client.cmake)
-
 include(cmake/renderer_gl1.cmake)
 include(cmake/renderer_gl2.cmake)
-
 include(cmake/basegame.cmake)
 include(cmake/missionpack.cmake)

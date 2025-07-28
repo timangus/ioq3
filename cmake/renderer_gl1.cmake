@@ -2,6 +2,7 @@ if(NOT BUILD_RENDERER_GL1)
     return()
 endif()
 
+include(cmake/utils/set_output_dirs.cmake)
 include(cmake/renderer_common.cmake)
 
 set(RENDERER_GL1_SOURCES

@@ -2,6 +2,8 @@ if(NOT BUILD_CLIENT)
     return()
 endif()
 
+include(cmake/utils/set_output_dirs.cmake)
+
 set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/cl_cgame.c
     ${SOURCE_DIR}/client/cl_cin.c

@@ -3,6 +3,8 @@ if(NOT BUILD_SERVER)
     return()
 endif()
 
+include(cmake/utils/set_output_dirs.cmake)
+
 set(SERVER_SOURCES
     ${SOURCE_DIR}/server/sv_bot.c
     ${SOURCE_DIR}/server/sv_client.c

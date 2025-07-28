@@ -1,6 +1,10 @@
+include_guard(GLOBAL)
+
 if(NOT BUILD_GAME_QVMS)
     return()
 endif()
+
+include(cmake/utils/set_output_dirs.cmake)
 
 set(Q3ASM_SOURCES
     ${SOURCE_DIR}/tools/asm/q3asm.c
