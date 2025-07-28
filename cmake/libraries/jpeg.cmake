@@ -1,11 +1,11 @@
 include(cmake/utils/find_include_dirs.cmake)
 
-set(INTERNAL_JPEG_DIR "${SOURCE_DIR}/jpeg-9f")
+set(INTERNAL_JPEG_DIR ${SOURCE_DIR}/jpeg-9f)
 
 if(USE_INTERNAL_JPEG)
-    file(GLOB_RECURSE JPEG_SOURCES "${INTERNAL_JPEG_DIR}/j*.c")
-    find_include_dirs(JPEG_INCLUDE_DIRS "${JPEG_SOURCES}")
-    set(JPEG_DEFINITIONS "USE_INTERNAL_JPEG")
+    file(GLOB_RECURSE JPEG_SOURCES ${INTERNAL_JPEG_DIR}/j*.c)
+    find_include_dirs(JPEG_INCLUDE_DIRS ${JPEG_SOURCES})
+    set(JPEG_DEFINITIONS USE_INTERNAL_JPEG)
     list(APPEND RENDERER_LIBRARY_SOURCES ${JPEG_SOURCES})
 else()
     find_package(JPEG REQUIRED)

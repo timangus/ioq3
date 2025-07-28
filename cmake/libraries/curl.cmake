@@ -2,7 +2,7 @@ if(NOT USE_HTTP OR WIN32)
     return()
 endif()
 
-set(INTERNAL_CURL_DIR "${SOURCE_DIR}/curl-8.15.0")
+set(INTERNAL_CURL_DIR ${SOURCE_DIR}/curl-8.15.0)
 
 find_package(CURL QUIET)
 

@@ -2,7 +2,7 @@ if(NOT USE_OPENAL)
     return()
 endif()
 
-set(INTERNAL_OPENAL_DIR "${SOURCE_DIR}/openal-soft-1.24.3")
+set(INTERNAL_OPENAL_DIR ${SOURCE_DIR}/openal-soft-1.24.3)
 
 find_package(OpenAL QUIET)
 
