@@ -1,4 +1,5 @@
 include(cmake/libraries/curl.cmake)
+include(cmake/libraries/freetype.cmake)
 include(cmake/libraries/jpeg.cmake)
 include(cmake/libraries/ogg.cmake)
 include(cmake/libraries/opus.cmake)
