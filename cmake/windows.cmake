@@ -20,6 +20,8 @@ if(MINGW)
     list(APPEND COMMON_LIBRARIES mingw32)
 endif()
 
+list(APPEND CLIENT_DEFINITIONS USE_ICON)
+
 # This is so the resource compiler can find the icon
 list(APPEND SERVER_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/misc)
 list(APPEND CLIENT_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/misc)
