@@ -9,9 +9,11 @@ list(APPEND SYSTEM_PLATFORM_SOURCES
     ${SOURCE_DIR}/sys/con_tty.c
 )
 
-list(APPEND CLIENT_PLATFORM_SOURCES
-    ${SOURCE_DIR}/client/cl_http_curl.c
-)
+if(USE_HTTP)
+    list(APPEND CLIENT_PLATFORM_SOURCES
+        ${SOURCE_DIR}/client/cl_http_curl.c
+    )
+endif()
 
 list(APPEND COMMON_LIBRARIES dl m)
 

@@ -18,6 +18,7 @@ option(USE_RENDERER_DLOPEN "Dynamically load the renderer(s)" ON)
 
 option(USE_OPENAL "OpenAL audio" ON)
 option(USE_OPENAL_DLOPEN "Dynamically load OpenAL" ON)
+option(USE_HTTP "HTTP download support" ON)
 
 # Release build by default, set externally if you want something else
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
@@ -105,6 +106,11 @@ if(USE_OPENAL)
         find_package(Threads REQUIRED)
         list(APPEND CLIENT_LIBRARIES Threads::Threads ${OPENAL_LIBRARY})
     endif()
+endif()
+
+if(USE_HTTP AND NOT WIN32)
+    list(APPEND CLIENT_DEFINITIONS ${CURL_DEFINITIONS} USE_HTTP)
+    list(APPEND CLIENT_INCLUDE_DIRS ${CURL_INCLUDE_DIR})
 endif()
 
 function(set_output_dirs TARGET)

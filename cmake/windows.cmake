@@ -10,9 +10,12 @@ list(APPEND SYSTEM_PLATFORM_SOURCES
     ${SOURCE_DIR}/sys/win_resource.rc
 )
 
-list(APPEND CLIENT_PLATFORM_SOURCES
-    ${SOURCE_DIR}/client/cl_http_windows.c
-)
+if(USE_HTTP)
+    list(APPEND CLIENT_PLATFORM_SOURCES
+        ${SOURCE_DIR}/client/cl_http_windows.c
+    )
+    list(APPEND CLIENT_LIBRARIES wininet)
+endif()
 
 list(APPEND COMMON_LIBRARIES ws2_32 winmm psapi)
 
