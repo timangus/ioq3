@@ -31,7 +31,7 @@ elseif(ARCH MATCHES "ppc" OR ARCH MATCHES "ppc64")
         ${SOURCE_DIR}/qcommon/vm_powerpc.c
         ${SOURCE_DIR}/qcommon/vm_powerpc_asm.c
     )
-elseif(ARCH MATCHES "arm" OR ARCH MATCHES "arm64")
+elseif(ARCH MATCHES "arm")
     list(APPEND COMMON_SOURCES
         ${SOURCE_DIR}/qcommon/vm_armv71.c
     )
@@ -326,65 +326,4 @@ set(UI_QVM_SOURCES ${SOURCE_DIR}/ui/ui_syscalls.asm)
 set(GAME_MODULE_SHARED_SOURCES
     ${SOURCE_DIR}/qcommon/q_math.c
     ${SOURCE_DIR}/qcommon/q_shared.c
-)
-
-set(Q3ASM_SOURCES
-    ${SOURCE_DIR}/tools/asm/q3asm.c
-    ${SOURCE_DIR}/tools/asm/cmdlib.c
-)
-
-set(Q3LCC_SOURCES
-    ${SOURCE_DIR}/tools/lcc/etc/lcc.c
-    ${SOURCE_DIR}/tools/lcc/etc/bytecode.c
-)
-
-set(Q3RCC_SOURCES
-    ${SOURCE_DIR}/tools/lcc/src/alloc.c
-    ${SOURCE_DIR}/tools/lcc/src/bind.c
-    ${SOURCE_DIR}/tools/lcc/src/bytecode.c
-    ${SOURCE_DIR}/tools/lcc/src/dag.c
-    ${SOURCE_DIR}/tools/lcc/src/decl.c
-    ${SOURCE_DIR}/tools/lcc/src/enode.c
-    ${SOURCE_DIR}/tools/lcc/src/error.c
-    ${SOURCE_DIR}/tools/lcc/src/event.c
-    ${SOURCE_DIR}/tools/lcc/src/expr.c
-    ${SOURCE_DIR}/tools/lcc/src/gen.c
-    ${SOURCE_DIR}/tools/lcc/src/init.c
-    ${SOURCE_DIR}/tools/lcc/src/inits.c
-    ${SOURCE_DIR}/tools/lcc/src/input.c
-    ${SOURCE_DIR}/tools/lcc/src/lex.c
-    ${SOURCE_DIR}/tools/lcc/src/list.c
-    ${SOURCE_DIR}/tools/lcc/src/main.c
-    ${SOURCE_DIR}/tools/lcc/src/null.c
-    ${SOURCE_DIR}/tools/lcc/src/output.c
-    ${SOURCE_DIR}/tools/lcc/src/prof.c
-    ${SOURCE_DIR}/tools/lcc/src/profio.c
-    ${SOURCE_DIR}/tools/lcc/src/simp.c
-    ${SOURCE_DIR}/tools/lcc/src/stmt.c
-    ${SOURCE_DIR}/tools/lcc/src/string.c
-    ${SOURCE_DIR}/tools/lcc/src/sym.c
-    ${SOURCE_DIR}/tools/lcc/src/symbolic.c
-    ${SOURCE_DIR}/tools/lcc/src/trace.c
-    ${SOURCE_DIR}/tools/lcc/src/tree.c
-    ${SOURCE_DIR}/tools/lcc/src/types.c
-)
-
-set(Q3RCC_DAGCHECK_SOURCE ${SOURCE_DIR}/tools/lcc/src/dagcheck.md)
-
-set(Q3CPP_SOURCES
-    ${SOURCE_DIR}/tools/lcc/cpp/cpp.c
-    ${SOURCE_DIR}/tools/lcc/cpp/lex.c
-    ${SOURCE_DIR}/tools/lcc/cpp/nlist.c
-    ${SOURCE_DIR}/tools/lcc/cpp/tokens.c
-    ${SOURCE_DIR}/tools/lcc/cpp/macro.c
-    ${SOURCE_DIR}/tools/lcc/cpp/eval.c
-    ${SOURCE_DIR}/tools/lcc/cpp/include.c
-    ${SOURCE_DIR}/tools/lcc/cpp/hideset.c
-    ${SOURCE_DIR}/tools/lcc/cpp/getopt.c
-    ${SOURCE_DIR}/tools/lcc/cpp/unix.c
-)
-
-set(LBURG_SOURCES
-    ${SOURCE_DIR}/tools/lcc/lburg/lburg.c
-    ${SOURCE_DIR}/tools/lcc/lburg/gram.c
 )

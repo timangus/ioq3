@@ -1,0 +1,50 @@
+if(NOT BUILD_RENDERER_GL2)
+    return()
+endif()
+
+include(cmake/renderer_common.cmake)
+
+set(SHADERS_DIR "${CMAKE_BINARY_DIR}/shaders.dir")
+file(MAKE_DIRECTORY ${SHADERS_DIR})
+
+foreach(SHADER_FILE IN LISTS RENDERER_GL2_SHADER_SOURCES)
+    get_filename_component(SHADER_NAME "${SHADER_FILE}" NAME_WE)
+    set(SHADER_C_FILE "${SHADERS_DIR}/${SHADER_NAME}.c")
+
+    string(REPLACE "${CMAKE_BINARY_DIR}/" "" SHADER_C_FILE_COMMENT "${SHADER_C_FILE}")
+
+    add_custom_command(
+        OUTPUT ${SHADER_C_FILE}
+        COMMAND ${CMAKE_COMMAND}
+            -DINPUT_FILE=${SHADER_FILE}
+            -DOUTPUT_FILE=${SHADER_C_FILE}
+            -DSHADER_NAME=${SHADER_NAME}
+            -P ${CMAKE_SOURCE_DIR}/cmake/stringify_shader.cmake
+        DEPENDS ${SHADER_FILE}
+        COMMENT "Stringify shader ${SHADER_C_FILE_COMMENT}")
+
+    list(APPEND RENDERER_GL2_SHADER_C_SOURCES ${SHADER_C_FILE})
+endforeach()
+
+set(RENDERER_GL2_BINARY "renderer_opengl2_${ARCH}")
+
+list(APPEND RENDERER_GL2_BINARY_SOURCES
+    ${RENDERER_COMMON_SOURCES}
+    ${RENDERER_GL2_SOURCES}
+    ${RENDERER_GL2_SHADER_C_SOURCES}
+    ${SDL_RENDERER_SOURCES}
+    ${RENDERER_LIBRARY_SOURCES})
+
+if(USE_RENDERER_DLOPEN)
+    list(APPEND RENDERER_GL2_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
+
+    add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
+
+    target_link_libraries(      ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+    target_include_directories( ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+    target_compile_definitions( ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+    target_compile_options(     ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+    target_link_options(        ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
+
+    set_output_dirs(${RENDERER_GL2_BINARY})
+endif()

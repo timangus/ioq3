@@ -1,0 +1,27 @@
+if(NOT BUILD_RENDERER_GL1)
+    return()
+endif()
+
+include(cmake/renderer_common.cmake)
+
+set(RENDERER_GL1_BINARY "renderer_opengl1_${ARCH}")
+
+list(APPEND RENDERER_GL1_BINARY_SOURCES
+    ${RENDERER_COMMON_SOURCES}
+    ${RENDERER_GL1_SOURCES}
+    ${SDL_RENDERER_SOURCES}
+    ${RENDERER_LIBRARY_SOURCES})
+
+if(USE_RENDERER_DLOPEN)
+    list(APPEND RENDERER_GL1_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
+
+    add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
+
+    target_link_libraries(      ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+    target_include_directories( ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+    target_compile_definitions( ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+    target_compile_options(     ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+    target_link_options(        ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
+
+    set_output_dirs(${RENDERER_GL1_BINARY})
+endif()
