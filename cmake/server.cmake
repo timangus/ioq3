@@ -3,6 +3,24 @@ if(NOT BUILD_SERVER)
     return()
 endif()
 
+set(SERVER_SOURCES
+    ${SOURCE_DIR}/server/sv_bot.c
+    ${SOURCE_DIR}/server/sv_client.c
+    ${SOURCE_DIR}/server/sv_ccmds.c
+    ${SOURCE_DIR}/server/sv_game.c
+    ${SOURCE_DIR}/server/sv_init.c
+    ${SOURCE_DIR}/server/sv_main.c
+    ${SOURCE_DIR}/server/sv_net_chan.c
+    ${SOURCE_DIR}/server/sv_snapshot.c
+    ${SOURCE_DIR}/server/sv_world.c
+)
+
+set(NULL_SOURCES
+    ${SOURCE_DIR}/null/null_client.c
+    ${SOURCE_DIR}/null/null_input.c
+    ${SOURCE_DIR}/null/null_snddma.c
+)
+
 set(SERVER_BINARY "${SERVER_NAME}.${ARCH}")
 
 list(APPEND SERVER_DEFINITIONS DEDICATED)

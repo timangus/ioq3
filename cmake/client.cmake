@@ -2,6 +2,40 @@ if(NOT BUILD_CLIENT)
     return()
 endif()
 
+set(CLIENT_SOURCES
+    ${SOURCE_DIR}/client/cl_cgame.c
+    ${SOURCE_DIR}/client/cl_cin.c
+    ${SOURCE_DIR}/client/cl_console.c
+    ${SOURCE_DIR}/client/cl_input.c
+    ${SOURCE_DIR}/client/cl_keys.c
+    ${SOURCE_DIR}/client/cl_main.c
+    ${SOURCE_DIR}/client/cl_net_chan.c
+    ${SOURCE_DIR}/client/cl_parse.c
+    ${SOURCE_DIR}/client/cl_scrn.c
+    ${SOURCE_DIR}/client/cl_ui.c
+    ${SOURCE_DIR}/client/cl_avi.c
+    ${SOURCE_DIR}/client/libmumblelink.c
+    ${SOURCE_DIR}/client/snd_altivec.c
+    ${SOURCE_DIR}/client/snd_adpcm.c
+    ${SOURCE_DIR}/client/snd_dma.c
+    ${SOURCE_DIR}/client/snd_mem.c
+    ${SOURCE_DIR}/client/snd_mix.c
+    ${SOURCE_DIR}/client/snd_wavelet.c
+    ${SOURCE_DIR}/client/snd_main.c
+    ${SOURCE_DIR}/client/snd_codec.c
+    ${SOURCE_DIR}/client/snd_codec_wav.c
+    ${SOURCE_DIR}/client/snd_codec_ogg.c
+    ${SOURCE_DIR}/client/snd_codec_opus.c
+    ${SOURCE_DIR}/client/qal.c
+    ${SOURCE_DIR}/client/snd_openal.c
+    ${CLIENT_PLATFORM_SOURCES}
+)
+
+set(SDL_CLIENT_SOURCES
+    ${SOURCE_DIR}/sdl/sdl_input.c
+    ${SOURCE_DIR}/sdl/sdl_snd.c
+)
+
 set(CLIENT_BINARY "${CLIENT_NAME}.${ARCH}")
 
 list(APPEND CLIENT_DEFINITIONS BOTLIB)
