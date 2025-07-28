@@ -42,7 +42,7 @@ prepare()
 
 prepare "https://downloads.xiph.org/releases/ogg/libogg-${OGG_VERSION}.tar.gz" "./configure" "\./\(include\|src\)/.*\.[ch]"
 prepare "https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VERSION}.tar.gz" "./configure" "\./\(include\|lib\)/.*\.[ch]" "\./lib/\(barkmel\|psytune\|tone\)\.c"
-prepare "https://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz" "./configure" "\./\(celt\|include\|silk\|src\)/.*\.[ch]"
+prepare "https://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz" "./configure" "\./\(celt\|include\|silk\|src\)/.*\.[ch]" "\./.*\(arm\|_compare\|_demo\|fixed\|mips\|tests\|x86\).*"
 prepare "https://downloads.xiph.org/releases/opus/opusfile-${OPUSFILE_VERSION}.tar.gz" "./configure" "\./\(include\|src\)/.*\.[ch]"
 prepare "https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz" "" "\./[^/]*\.[ch]" "\./gz.*\.[c]"
 prepare "https://www.ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz" "./configure" "\./\(j.*\.c\|.*\.h\)" "\./\(jmem\(ansi\|dos\|mac\|name\)\|jpegtran\)\.c"
