@@ -61,8 +61,6 @@ include(cmake/platforms/windows.cmake)
 include(cmake/platforms/unix.cmake)
 include(cmake/platforms/macos.cmake)
 
-include(cmake/sources.cmake)
-
 include(cmake/libraries.cmake)
 
 include(cmake/server.cmake)

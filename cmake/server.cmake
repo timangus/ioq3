@@ -4,6 +4,7 @@ if(NOT BUILD_SERVER)
 endif()
 
 include(cmake/utils/set_output_dirs.cmake)
+include(cmake/shared_sources.cmake)
 
 set(SERVER_SOURCES
     ${SOURCE_DIR}/server/sv_bot.c

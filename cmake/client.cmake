@@ -3,6 +3,7 @@ if(NOT BUILD_CLIENT)
 endif()
 
 include(cmake/utils/set_output_dirs.cmake)
+include(cmake/shared_sources.cmake)
 
 set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/cl_cgame.c

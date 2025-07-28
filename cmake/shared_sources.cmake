@@ -1,3 +1,5 @@
+include_guard(GLOBAL)
+
 set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/cm_load.c
     ${SOURCE_DIR}/qcommon/cm_patch.c
