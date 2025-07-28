@@ -46,8 +46,7 @@ endif()
 
 add_compile_definitions(
     ARCH_STRING="${ARCH}"
-    PRODUCT_VERSION="${PRODUCT_VERSION}"
-)
+    PRODUCT_VERSION="${PRODUCT_VERSION}")
 
 list(APPEND SERVER_DEFINITIONS DEDICATED)
 
@@ -122,8 +121,7 @@ function(set_output_dirs TARGET)
         set_target_properties(${TARGET} PROPERTIES
             LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
             RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
-            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
-        )
+            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}")
     endforeach()
 endfunction()
 
@@ -135,8 +133,7 @@ if(BUILD_SERVER)
         ${BOTLIB_SOURCES}
         ${SYSTEM_SOURCES}
         ${ASM_SOURCES}
-        ${ZLIB_SOURCES}
-    )
+        ${ZLIB_SOURCES})
 
     add_executable(${SERVER_BINARY}
         ${SERVER_EXECUTABLE_OPTIONS}
@@ -173,8 +170,7 @@ if(BUILD_RENDERER_GL1)
         ${RENDERER_COMMON_SOURCES}
         ${RENDERER_GL1_SOURCES}
         ${SDL_RENDERER_SOURCES}
-        ${JPEG_SOURCES}
-    )
+        ${JPEG_SOURCES})
 
     if(USE_RENDERER_DLOPEN)
         list(APPEND RENDERER_GL1_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
@@ -207,8 +203,7 @@ if(BUILD_RENDERER_GL2)
                 -DSHADER_NAME=${SHADER_NAME}
                 -P ${CMAKE_SOURCE_DIR}/cmake/stringify_shader.cmake
             DEPENDS ${SHADER_FILE}
-            COMMENT "Stringify shader ${SHADER_C_FILE_COMMENT}"
-        )
+            COMMENT "Stringify shader ${SHADER_C_FILE_COMMENT}")
 
         list(APPEND RENDERER_GL2_SHADER_C_SOURCES ${SHADER_C_FILE})
     endforeach()
@@ -218,8 +213,7 @@ if(BUILD_RENDERER_GL2)
         ${RENDERER_GL2_SOURCES}
         ${RENDERER_GL2_SHADER_C_SOURCES}
         ${SDL_RENDERER_SOURCES}
-        ${JPEG_SOURCES}
-    )
+        ${JPEG_SOURCES})
 
     if(USE_RENDERER_DLOPEN)
         list(APPEND RENDERER_GL2_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
@@ -243,8 +237,7 @@ if(BUILD_CLIENT)
         ${SYSTEM_SOURCES}
         ${ASM_SOURCES}
         ${ZLIB_SOURCES}
-        ${SDL_CLIENT_SOURCES}
-    )
+        ${SDL_CLIENT_SOURCES})
 
     if(NOT USE_RENDERER_DLOPEN)
         if(BUILD_RENDERER_GL1)
@@ -321,8 +314,7 @@ if(BUILD_GAME_QVMS)
     add_custom_command(
         OUTPUT ${DAGCHECK_C}
         COMMAND lburg ${Q3RCC_DAGCHECK_SOURCE} ${DAGCHECK_C}
-        DEPENDS lburg ${Q3RCC_DAGCHECK_SOURCE}
-    )
+        DEPENDS lburg ${Q3RCC_DAGCHECK_SOURCE})
 
     add_executable(q3rcc ${Q3RCC_SOURCES} ${DAGCHECK_C})
     set_output_dirs(q3rcc SUBDIRECTORY tools)
@@ -341,8 +333,7 @@ if(BUILD_GAME_QVMS)
         endif()
         add_custom_command(
             OUTPUT "${QVM_OUTPUT_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_OUTPUT_DIR}"
-        )
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_OUTPUT_DIR}")
 
         if(ARG_OUTPUT_NAME)
             set(QVM_FILE "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_NAME}.qvm")
@@ -373,8 +364,7 @@ if(BUILD_GAME_QVMS)
                 OUTPUT ${ASM_FILE}
                 COMMAND q3lcc ${LCC_FLAGS} -o ${ASM_FILE} ${SOURCE}
                 DEPENDS ${SOURCE} q3lcc
-                COMMENT "Building C object ${ASM_FILE_COMMENT}"
-            )
+                COMMENT "Building C object ${ASM_FILE_COMMENT}")
 
             list(APPEND ASM_FILES ${ASM_FILE})
         endforeach()
@@ -384,8 +374,7 @@ if(BUILD_GAME_QVMS)
             OUTPUT ${QVM_FILE}
             COMMAND q3asm -o ${QVM_FILE} ${ASM_FILES}
             DEPENDS ${ASM_FILES} q3asm
-            COMMENT "Linking C QVM library ${QVM_FILE_COMMENT}"
-        )
+            COMMENT "Linking C QVM library ${QVM_FILE_COMMENT}")
 
         string(REGEX REPLACE "[^A-Za-z0-9]" "_" TARGET_NAME "${MODULE_NAME}")
         add_custom_target(${TARGET_NAME} ALL DEPENDS ${QVM_FILE})
@@ -395,22 +384,19 @@ if(BUILD_GAME_QVMS)
         DEFINITIONS CGAME
         OUTPUT_NAME "${CGAME_MODULE}"
         OUTPUT_DIRECTORY "${BASEGAME}/vm"
-        SOURCES ${CGAME_SOURCES_BASEGAME} ${CGAME_QVM_SOURCES}
-    )
+        SOURCES ${CGAME_SOURCES_BASEGAME} ${CGAME_QVM_SOURCES})
 
     add_qvm(${GAME_MODULE_QVM_BASEGAME}
         DEFINITIONS QAGAME
         OUTPUT_NAME "${GAME_MODULE}"
         OUTPUT_DIRECTORY "${BASEGAME}/vm"
-        SOURCES ${GAME_SOURCES_BASEGAME} ${GAME_QVM_SOURCES}
-    )
+        SOURCES ${GAME_SOURCES_BASEGAME} ${GAME_QVM_SOURCES})
 
     add_qvm(${UI_MODULE_QVM_BASEGAME}
         DEFINITIONS UI
         OUTPUT_NAME "${UI_MODULE}"
         OUTPUT_DIRECTORY "${BASEGAME}/vm"
-        SOURCES ${UI_SOURCES_BASEGAME} ${UI_QVM_SOURCES}
-    )
+        SOURCES ${UI_SOURCES_BASEGAME} ${UI_QVM_SOURCES})
 endif()
 
 include(cmake/missionpack.cmake)

@@ -15,8 +15,7 @@ if(ARCH MATCHES "x86_64")
     list(APPEND ASM_SOURCES ${SOURCE_DIR}/asm/vm_x86_64.asm)
     set_source_files_properties(
         ${ASM_SOURCES}
-        PROPERTIES COMPILE_DEFINITIONS "idx64"
-    )
+        PROPERTIES COMPILE_DEFINITIONS "idx64")
 endif()
 
 # C4267: 'var' : conversion from 'size_t' to 'type', possible loss of data
