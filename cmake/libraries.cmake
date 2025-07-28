@@ -1,6 +1,7 @@
 set(INTERNAL_SDL_DIR "${SOURCE_DIR}/SDL2-2.32.8")
 set(INTERNAL_ZLIB_DIR "${SOURCE_DIR}/zlib-1.3.1")
 set(INTERNAL_JPEG_DIR "${SOURCE_DIR}/jpeg-9f")
+set(INTERNAL_OPENAL_DIR "${SOURCE_DIR}/openal-soft-1.24.3")
 
 function(find_include_dirs OUT_VAR)
     set(SOURCES ${ARGN})
@@ -63,7 +64,7 @@ endif()
 find_package(SDL2 QUIET ${SYSTEM_SDL_REQUIRED})
 
 if(NOT SDL2_FOUND)
-    set(SDL2_INCLUDE_DIRS "${INTERNAL_SDL_DIR}/include")
+    set(SDL2_INCLUDE_DIRS ${INTERNAL_SDL_DIR}/include)
 
     # On Windows and macOS we have internal SDL binaries we can use
     if(MINGW)
@@ -74,5 +75,15 @@ if(NOT SDL2_FOUND)
         set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/macos/libSDL2main.a ${SOURCE_DIR}/libs/macos/libSDL2-2.0.0.dylib)
     else()
         message(FATAL_ERROR "SDL2 not found and no internal binaries available")
+    endif()
+endif()
+
+if(USE_OPENAL)
+    find_package(OpenAL QUIET)
+
+    if(NOT OpenAL_FOUND)
+        set(OPENAL_DEFINITIONS USE_INTERNAL_OPENAL_HEADERS)
+        set(OPENAL_INCLUDE_DIR ${INTERNAL_OPENAL_DIR}/include)
+        set(OPENAL_LIBRARY openal)
     endif()
 endif()

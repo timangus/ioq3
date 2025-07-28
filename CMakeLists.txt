@@ -16,6 +16,9 @@ option(USE_INTERNAL_JPEG "Use internal copy of libjpeg" ${USE_INTERNAL_LIBS})
 
 option(USE_RENDERER_DLOPEN "Dynamically load the renderer(s)" ON)
 
+option(USE_OPENAL "OpenAL audio" ON)
+option(USE_OPENAL_DLOPEN "Dynamically load OpenAL" ON)
+
 # Release build by default, set externally if you want something else
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -58,13 +61,6 @@ if(BUILD_STANDALONE)
     list(APPEND CLIENT_DEFINITIONS STANDALONE)
 endif()
 
-if(USE_RENDERER_DLOPEN)
-    list(APPEND CLIENT_DEFINITIONS USE_RENDERER_DLOPEN)
-    list(APPEND RENDERER_DEFINITIONS USE_RENDERER_DLOPEN)
-elseif(BUILD_RENDERER_GL1 AND BUILD_RENDERER_GL2)
-    message(FATAL_ERROR "Multiple static renderers enabled; choose one")
-endif()
-
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
 include(cmake/msvc.cmake)
@@ -98,6 +94,18 @@ set(UI_MODULE_BINARY "${UI_MODULE}${ARCH}")
 set(UI_MODULE_BINARY_BASEGAME "${UI_MODULE_BINARY}_${BASEGAME}")
 set(UI_MODULE_QVM "${UI_MODULE}qvm")
 set(UI_MODULE_QVM_BASEGAME "${UI_MODULE_QVM}_${BASEGAME}")
+
+if(USE_OPENAL)
+    list(APPEND CLIENT_DEFINITIONS ${OPENAL_DEFINITIONS} USE_OPENAL)
+    list(APPEND CLIENT_INCLUDE_DIRS ${OPENAL_INCLUDE_DIR})
+
+    if(USE_OPENAL_DLOPEN)
+        list(APPEND CLIENT_DEFINITIONS USE_OPENAL_DLOPEN)
+    else()
+        find_package(Threads REQUIRED)
+        list(APPEND CLIENT_LIBRARIES Threads::Threads ${OPENAL_LIBRARY})
+    endif()
+endif()
 
 function(set_output_dirs TARGET)
     list(REMOVE_AT ARGV 0)
@@ -151,6 +159,13 @@ if(BUILD_SERVER)
     target_link_options(${SERVER_BINARY} PRIVATE
         ${SERVER_LINK_OPTIONS})
     set_output_dirs(${SERVER_BINARY})
+endif()
+
+if(USE_RENDERER_DLOPEN)
+    list(APPEND CLIENT_DEFINITIONS USE_RENDERER_DLOPEN)
+    list(APPEND RENDERER_DEFINITIONS USE_RENDERER_DLOPEN)
+elseif(BUILD_RENDERER_GL1 AND BUILD_RENDERER_GL2)
+    message(FATAL_ERROR "Multiple static renderers enabled; choose one")
 endif()
 
 list(APPEND RENDERER_LIBRARIES
