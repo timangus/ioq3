@@ -8,6 +8,7 @@ option(BUILD_RENDERER_GL1 "Build GL1 renderer" ON)
 option(BUILD_RENDERER_GL2 "Build GL2 renderer" ON)
 option(BUILD_GAME_LIBRARIES "Build game module libraries" ON)
 option(BUILD_GAME_QVMS "Build game module qvms" ON)
+option(BUILD_STANDALONE "Build binaries for standalone games" OFF)
 
 option(USE_INTERNAL_LIBS "Use internally packaged libraries" ON)
 option(USE_INTERNAL_ZLIB "Use internal copy of zlib" ${USE_INTERNAL_LIBS})
@@ -52,6 +53,11 @@ list(APPEND SERVER_DEFINITIONS DEDICATED)
 
 list(APPEND SERVER_DEFINITIONS BOTLIB)
 list(APPEND CLIENT_DEFINITIONS BOTLIB)
+
+if(BUILD_STANDALONE)
+    list(APPEND SERVER_DEFINITIONS STANDALONE)
+    list(APPEND CLIENT_DEFINITIONS STANDALONE)
+endif()
 
 if(USE_RENDERER_DLOPEN)
     list(APPEND CLIENT_DEFINITIONS USE_RENDERER_DLOPEN)
