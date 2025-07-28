@@ -96,23 +96,6 @@ set(UI_MODULE_BINARY_BASEGAME "${UI_MODULE_BINARY}_${BASEGAME}")
 set(UI_MODULE_QVM "${UI_MODULE}qvm")
 set(UI_MODULE_QVM_BASEGAME "${UI_MODULE_QVM}_${BASEGAME}")
 
-if(USE_OPENAL)
-    list(APPEND CLIENT_DEFINITIONS ${OPENAL_DEFINITIONS} USE_OPENAL)
-    list(APPEND CLIENT_INCLUDE_DIRS ${OPENAL_INCLUDE_DIR})
-
-    if(USE_OPENAL_DLOPEN)
-        list(APPEND CLIENT_DEFINITIONS USE_OPENAL_DLOPEN)
-    else()
-        find_package(Threads REQUIRED)
-        list(APPEND CLIENT_LIBRARIES Threads::Threads ${OPENAL_LIBRARY})
-    endif()
-endif()
-
-if(USE_HTTP AND NOT WIN32)
-    list(APPEND CLIENT_DEFINITIONS ${CURL_DEFINITIONS} USE_HTTP)
-    list(APPEND CLIENT_INCLUDE_DIRS ${CURL_INCLUDE_DIR})
-endif()
-
 function(set_output_dirs TARGET)
     list(REMOVE_AT ARGV 0)
     cmake_parse_arguments(ARG "" "" "SUBDIRECTORY" ${ARGV})
@@ -139,33 +122,32 @@ function(set_output_dirs TARGET)
     endforeach()
 endfunction()
 
+
+######## SERVER
+
 if(BUILD_SERVER)
-    set(SERVER_BINARY_SOURCES
+    list(APPEND SERVER_BINARY_SOURCES
         ${SERVER_SOURCES}
         ${NULL_SOURCES}
         ${COMMON_SOURCES}
         ${BOTLIB_SOURCES}
         ${SYSTEM_SOURCES}
         ${ASM_SOURCES}
-        ${ZLIB_SOURCES})
+        ${SERVER_LIBRARY_SOURCES})
 
-    add_executable(${SERVER_BINARY}
-        ${SERVER_EXECUTABLE_OPTIONS}
-        ${SERVER_BINARY_SOURCES})
-    target_include_directories(${SERVER_BINARY} PRIVATE
-        ${SERVER_INCLUDE_DIRS}
-        ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(${SERVER_BINARY}
-        ${COMMON_LIBRARIES}
-        ${SERVER_LIBRARIES}
-        ${ZLIB_LIBRARIES})
-    target_compile_definitions(${SERVER_BINARY} PRIVATE
-        ${SERVER_DEFINITIONS}
-        ${ZLIB_DEFINITIONS})
-    target_link_options(${SERVER_BINARY} PRIVATE
-        ${SERVER_LINK_OPTIONS})
+    add_executable(${SERVER_BINARY} ${SERVER_EXECUTABLE_OPTIONS} ${SERVER_BINARY_SOURCES})
+
+    target_include_directories(     ${SERVER_BINARY} PRIVATE ${SERVER_INCLUDE_DIRS})
+    target_link_libraries(          ${SERVER_BINARY} PRIVATE ${COMMON_LIBRARIES} ${SERVER_LIBRARIES})
+    target_compile_definitions(     ${SERVER_BINARY} PRIVATE ${SERVER_DEFINITIONS})
+    target_compile_options(         ${SERVER_BINARY} PRIVATE ${SERVER_COMPILE_OPTIONS})
+    target_link_options(            ${SERVER_BINARY} PRIVATE ${SERVER_LINK_OPTIONS})
+
     set_output_dirs(${SERVER_BINARY})
 endif()
+
+
+######### RENDERERS
 
 if(USE_RENDERER_DLOPEN)
     list(APPEND CLIENT_DEFINITIONS USE_RENDERER_DLOPEN)
@@ -174,34 +156,26 @@ elseif(BUILD_RENDERER_GL1 AND BUILD_RENDERER_GL2)
     message(FATAL_ERROR "Multiple static renderers enabled; choose one")
 endif()
 
-list(APPEND RENDERER_LIBRARIES
-    ${COMMON_LIBRARIES}
-    ${JPEG_LIBRARIES}
-    ${SDL2_LIBRARIES})
-
-list(APPEND RENDERER_INCLUDE_DIRS
-    ${JPEG_INCLUDE_DIRS}
-    ${SDL2_INCLUDE_DIRS})
-
-list(APPEND RENDERER_DEFINITIONS ${JPEG_DEFINTIONS})
-list(APPEND RENDERER_COMPILE_OPTIONS ${SDL2_CFLAGS_OTHER})
+list(APPEND RENDERER_LIBRARIES ${COMMON_LIBRARIES})
 
 if(BUILD_RENDERER_GL1)
-    set(RENDERER_GL1_BINARY_SOURCES
+    list(APPEND RENDERER_GL1_BINARY_SOURCES
         ${RENDERER_COMMON_SOURCES}
         ${RENDERER_GL1_SOURCES}
         ${SDL_RENDERER_SOURCES}
-        ${JPEG_SOURCES})
+        ${RENDERER_LIBRARY_SOURCES})
 
     if(USE_RENDERER_DLOPEN)
         list(APPEND RENDERER_GL1_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
 
         add_library(${RENDERER_GL1_BINARY} SHARED ${RENDERER_GL1_BINARY_SOURCES})
-        target_link_libraries(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LIBRARIES})
-        target_include_directories(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
-        target_compile_definitions(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
-        target_compile_options(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
-        target_link_options(${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
+
+        target_link_libraries(      ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+        target_include_directories( ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+        target_compile_definitions( ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+        target_compile_options(     ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+        target_link_options(        ${RENDERER_GL1_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
+
         set_output_dirs(${RENDERER_GL1_BINARY})
     endif()
 endif()
@@ -229,36 +203,41 @@ if(BUILD_RENDERER_GL2)
         list(APPEND RENDERER_GL2_SHADER_C_SOURCES ${SHADER_C_FILE})
     endforeach()
 
-    set(RENDERER_GL2_BINARY_SOURCES
+    list(APPEND RENDERER_GL2_BINARY_SOURCES
         ${RENDERER_COMMON_SOURCES}
         ${RENDERER_GL2_SOURCES}
         ${RENDERER_GL2_SHADER_C_SOURCES}
         ${SDL_RENDERER_SOURCES}
-        ${JPEG_SOURCES})
+        ${RENDERER_LIBRARY_SOURCES})
 
     if(USE_RENDERER_DLOPEN)
         list(APPEND RENDERER_GL2_BINARY_SOURCES ${DYNAMIC_RENDERER_SOURCES})
 
         add_library(${RENDERER_GL2_BINARY} SHARED ${RENDERER_GL2_BINARY_SOURCES})
-        target_link_libraries(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LIBRARIES})
-        target_include_directories(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
-        target_compile_definitions(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
-        target_compile_options(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
-        target_link_options(${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
+
+        target_link_libraries(      ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+        target_include_directories( ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+        target_compile_definitions( ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+        target_compile_options(     ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+        target_link_options(        ${RENDERER_GL2_BINARY} PRIVATE ${RENDERER_LINK_OPTIONS})
+
         set_output_dirs(${RENDERER_GL2_BINARY})
     endif()
 endif()
 
+
+######## CLIENT
+
 if(BUILD_CLIENT)
-    set(CLIENT_BINARY_SOURCES
+    list(APPEND CLIENT_BINARY_SOURCES
         ${SERVER_SOURCES}
         ${CLIENT_SOURCES}
         ${COMMON_SOURCES}
         ${BOTLIB_SOURCES}
         ${SYSTEM_SOURCES}
         ${ASM_SOURCES}
-        ${ZLIB_SOURCES}
-        ${SDL_CLIENT_SOURCES})
+        ${SDL_CLIENT_SOURCES}
+        ${CLIENT_LIBRARY_SOURCES})
 
     if(NOT USE_RENDERER_DLOPEN)
         if(BUILD_RENDERER_GL1)
@@ -270,34 +249,26 @@ if(BUILD_CLIENT)
         endif()
     endif()
 
-    add_executable(${CLIENT_BINARY}
-        ${CLIENT_EXECUTABLE_OPTIONS}
-        ${CLIENT_BINARY_SOURCES})
-    target_include_directories(${CLIENT_BINARY} PRIVATE
-        ${CLIENT_INCLUDE_DIRS}
-        ${ZLIB_INCLUDE_DIRS}
-        ${SDL2_INCLUDE_DIRS})
-    target_link_libraries(${CLIENT_BINARY} PRIVATE
-        ${COMMON_LIBRARIES}
-        ${CLIENT_LIBRARIES}
-        ${ZLIB_LIBRARIES}
-        ${SDL2_LIBRARIES})
-    target_compile_definitions(${CLIENT_BINARY} PRIVATE
-        ${CLIENT_DEFINITIONS}
-        ${ZLIB_DEFINITIONS})
-    target_compile_options(${CLIENT_BINARY} PRIVATE
-        ${SDL2_CFLAGS_OTHER})
-    target_link_options(${CLIENT_BINARY} PRIVATE
-        ${CLIENT_LINK_OPTIONS})
+    add_executable(${CLIENT_BINARY} ${CLIENT_EXECUTABLE_OPTIONS} ${CLIENT_BINARY_SOURCES})
+
+    target_include_directories(     ${CLIENT_BINARY} PRIVATE ${CLIENT_INCLUDE_DIRS})
+    target_link_libraries(          ${CLIENT_BINARY} PRIVATE ${COMMON_LIBRARIES} ${CLIENT_LIBRARIES})
+    target_compile_definitions(     ${CLIENT_BINARY} PRIVATE ${CLIENT_DEFINITIONS})
+    target_compile_options(         ${CLIENT_BINARY} PRIVATE ${CLIENT_COMPILE_OPTIONS})
+    target_link_options(            ${CLIENT_BINARY} PRIVATE ${CLIENT_LINK_OPTIONS})
+
     set_output_dirs(${CLIENT_BINARY})
 
     if(NOT USE_RENDERER_DLOPEN)
-        target_link_libraries(${CLIENT_BINARY} PRIVATE ${RENDERER_LIBRARIES})
-        target_include_directories(${CLIENT_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
-        target_compile_definitions(${CLIENT_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
-        target_compile_options(${CLIENT_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
+        target_link_libraries(      ${CLIENT_BINARY} PRIVATE ${RENDERER_LIBRARIES})
+        target_include_directories( ${CLIENT_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
+        target_compile_definitions( ${CLIENT_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
+        target_compile_options(     ${CLIENT_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
     endif()
 endif()
+
+
+######## GAME MODULES
 
 if(BUILD_GAME_LIBRARIES OR BUILD_GAME_QVMS)
     set(CGAME_SOURCES_BASEGAME ${CGAME_SOURCES} ${GAME_MODULE_SHARED_SOURCES})
