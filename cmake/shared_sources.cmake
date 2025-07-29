@@ -41,6 +41,9 @@ elseif(ARCH MATCHES "arm")
     list(APPEND COMMON_SOURCES
         ${SOURCE_DIR}/qcommon/vm_armv71.c
     )
+else()
+    list(APPEND SERVER_DEFINITIONS NO_VM_COMPILED)
+    list(APPEND CLIENT_DEFINITIONS NO_VM_COMPILED)
 endif()
 
 set(SYSTEM_SOURCES
