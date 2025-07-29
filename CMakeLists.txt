@@ -76,13 +76,8 @@ add_compile_definitions(
 
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
-include(cmake/compilers/msvc.cmake)
-include(cmake/compilers/gnu.cmake)
-
-include(cmake/platforms/windows.cmake)
-include(cmake/platforms/unix.cmake)
-include(cmake/platforms/macos.cmake)
-
+include(cmake/compilers/all.cmake)
+include(cmake/platforms/all.cmake)
 include(cmake/libraries/all.cmake)
 
 include(cmake/server.cmake)
