@@ -50,6 +50,18 @@ set(SYSTEM_SOURCES
     ${SYSTEM_PLATFORM_SOURCES}
 )
 
+set(SERVER_SOURCES
+    ${SOURCE_DIR}/server/sv_bot.c
+    ${SOURCE_DIR}/server/sv_client.c
+    ${SOURCE_DIR}/server/sv_ccmds.c
+    ${SOURCE_DIR}/server/sv_game.c
+    ${SOURCE_DIR}/server/sv_init.c
+    ${SOURCE_DIR}/server/sv_main.c
+    ${SOURCE_DIR}/server/sv_net_chan.c
+    ${SOURCE_DIR}/server/sv_snapshot.c
+    ${SOURCE_DIR}/server/sv_world.c
+)
+
 set(BOTLIB_SOURCES
     ${SOURCE_DIR}/botlib/be_aas_bspq3.c
     ${SOURCE_DIR}/botlib/be_aas_cluster.c

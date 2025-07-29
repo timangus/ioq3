@@ -6,18 +6,6 @@ endif()
 include(cmake/utils/set_output_dirs.cmake)
 include(cmake/shared_sources.cmake)
 
-set(SERVER_SOURCES
-    ${SOURCE_DIR}/server/sv_bot.c
-    ${SOURCE_DIR}/server/sv_client.c
-    ${SOURCE_DIR}/server/sv_ccmds.c
-    ${SOURCE_DIR}/server/sv_game.c
-    ${SOURCE_DIR}/server/sv_init.c
-    ${SOURCE_DIR}/server/sv_main.c
-    ${SOURCE_DIR}/server/sv_net_chan.c
-    ${SOURCE_DIR}/server/sv_snapshot.c
-    ${SOURCE_DIR}/server/sv_world.c
-)
-
 set(NULL_SOURCES
     ${SOURCE_DIR}/null/null_client.c
     ${SOURCE_DIR}/null/null_input.c
