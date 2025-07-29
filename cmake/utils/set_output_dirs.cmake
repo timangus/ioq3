@@ -11,17 +11,17 @@ function(set_output_dirs TARGET)
     endif()
 
     foreach(CONFIG ${CONFIGS})
-        string(TOUPPER "${CONFIG}" CONFIG_UPPER)
+        string(TOUPPER ${CONFIG} CONFIG_UPPER)
 
         if(ARG_SUBDIRECTORY)
-            set(LIB_DIR "${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY}")
+            set(LIB_DIR ${CMAKE_BINARY_DIR}/${CONFIG}/${ARG_SUBDIRECTORY})
         else()
-            set(LIB_DIR "${CMAKE_BINARY_DIR}/${CONFIG}")
+            set(LIB_DIR ${CMAKE_BINARY_DIR}/${CONFIG})
         endif()
 
         set_target_properties(${TARGET} PROPERTIES
-            LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
-            RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}"
-            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} "${LIB_DIR}")
+            LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} ${LIB_DIR}
+            RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} ${LIB_DIR}
+            ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} ${LIB_DIR})
     endforeach()
 endfunction()

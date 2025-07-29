@@ -75,7 +75,7 @@ add_dependencies(q3lcc q3rcc q3cpp)
 
 add_executable(lburg ${LBURG_SOURCES})
 set_output_dirs(lburg SUBDIRECTORY tools)
-set(DAGCHECK_C "${CMAKE_BINARY_DIR}/$<CONFIG>/tools/dagcheck.c")
+set(DAGCHECK_C ${CMAKE_BINARY_DIR}/$<CONFIG>/tools/dagcheck.c)
 add_custom_command(
     OUTPUT ${DAGCHECK_C}
     COMMAND lburg ${Q3RCC_DAGCHECK_SOURCE} ${DAGCHECK_C}
@@ -92,21 +92,21 @@ function(add_qvm MODULE_NAME)
     list(REMOVE_AT ARGV 0)
     cmake_parse_arguments(ARG "" "" "DEFINITIONS;OUTPUT_NAME;OUTPUT_DIRECTORY;SOURCES" ${ARGV})
 
-    set(QVM_OUTPUT_DIR "${CMAKE_BINARY_DIR}/$<CONFIG>")
+    set(QVM_OUTPUT_DIR ${CMAKE_BINARY_DIR}/$<CONFIG>)
     if(ARG_OUTPUT_DIRECTORY)
-        set(QVM_OUTPUT_DIR "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_DIRECTORY}")
+        set(QVM_OUTPUT_DIR ${QVM_OUTPUT_DIR}/${ARG_OUTPUT_DIRECTORY})
     endif()
     add_custom_command(
-        OUTPUT "${QVM_OUTPUT_DIR}"
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${QVM_OUTPUT_DIR}")
+        OUTPUT ${QVM_OUTPUT_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${QVM_OUTPUT_DIR})
 
     if(ARG_OUTPUT_NAME)
-        set(QVM_FILE "${QVM_OUTPUT_DIR}/${ARG_OUTPUT_NAME}.qvm")
+        set(QVM_FILE ${QVM_OUTPUT_DIR}/${ARG_OUTPUT_NAME}.qvm)
     else()
-        set(QVM_FILE "${QVM_OUTPUT_DIR}/${MODULE_NAME}.qvm")
+        set(QVM_FILE ${QVM_OUTPUT_DIR}/${MODULE_NAME}.qvm)
     endif()
 
-    set(QVM_ASM_DIR "${CMAKE_BINARY_DIR}/qvm.dir/${MODULE_NAME}")
+    set(QVM_ASM_DIR ${CMAKE_BINARY_DIR}/qvm.dir/${MODULE_NAME})
     file(MAKE_DIRECTORY ${QVM_ASM_DIR})
 
     set(LCC_FLAGS "")
@@ -123,7 +123,7 @@ function(add_qvm MODULE_NAME)
 
         get_filename_component(BASE_FILE ${SOURCE} NAME_WE)
         set(ASM_FILE ${QVM_ASM_DIR}/${BASE_FILE}.asm)
-        string(REPLACE "${CMAKE_BINARY_DIR}/" "" ASM_FILE_COMMENT "${ASM_FILE}")
+        string(REPLACE "${CMAKE_BINARY_DIR}/" "" ASM_FILE_COMMENT ${ASM_FILE})
 
         add_custom_command(
             OUTPUT ${ASM_FILE}
@@ -134,13 +134,13 @@ function(add_qvm MODULE_NAME)
         list(APPEND ASM_FILES ${ASM_FILE})
     endforeach()
 
-    string(REPLACE "${CMAKE_BINARY_DIR}/" "" QVM_FILE_COMMENT "${QVM_FILE}")
+    string(REPLACE "${CMAKE_BINARY_DIR}/" "" QVM_FILE_COMMENT ${QVM_FILE})
     add_custom_command(
         OUTPUT ${QVM_FILE}
         COMMAND q3asm -o ${QVM_FILE} ${ASM_FILES}
         DEPENDS ${ASM_FILES} q3asm
         COMMENT "Linking C QVM library ${QVM_FILE_COMMENT}")
 
-    string(REGEX REPLACE "[^A-Za-z0-9]" "_" TARGET_NAME "${MODULE_NAME}")
+    string(REGEX REPLACE "[^A-Za-z0-9]" "_" TARGET_NAME ${MODULE_NAME})
     add_custom_target(${TARGET_NAME} ALL DEPENDS ${QVM_FILE})
 endfunction()
