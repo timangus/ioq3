@@ -38,6 +38,21 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 set(PRODUCT_VERSION "${CMAKE_PROJECT_VERSION}")
 
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
+    execute_process(
+        COMMAND git show -s --pretty=format:%h-%ad --date=short
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_REV
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+
+    if(GIT_REV)
+        set(PRODUCT_VERSION "${PRODUCT_VERSION}_GIT_${GIT_REV}")
+        set(HAVE_GIT YES)
+    endif()
+endif()
+
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CPU)
 if(CPU MATCHES "^(i386|i686|x86)$")
     set(ARCH "x86")

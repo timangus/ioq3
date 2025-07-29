@@ -2,6 +2,7 @@ if(NOT BUILD_CLIENT)
     return()
 endif()
 
+include(cmake/utils/add_git_dependency.cmake)
 include(cmake/utils/set_output_dirs.cmake)
 include(cmake/shared_sources.cmake)
 
@@ -33,6 +34,8 @@ set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/snd_openal.c
     ${CLIENT_PLATFORM_SOURCES}
 )
+
+add_git_dependency(${SOURCE_DIR}/client/cl_console.c)
 
 set(SDL_CLIENT_SOURCES
     ${SOURCE_DIR}/sdl/sdl_input.c

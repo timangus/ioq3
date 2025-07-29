@@ -1,5 +1,7 @@
 include_guard(GLOBAL)
 
+include (cmake/utils/add_git_dependency.cmake)
+
 set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/cm_load.c
     ${SOURCE_DIR}/qcommon/cm_patch.c
@@ -23,6 +25,8 @@ set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/vm.c
     ${SOURCE_DIR}/qcommon/vm_interpreted.c
 )
+
+add_git_dependency(${SOURCE_DIR}/qcommon/common.c)
 
 if(ARCH MATCHES "x86" OR ARCH MATCHES "x86_64")
     list(APPEND COMMON_SOURCES
