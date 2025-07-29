@@ -53,6 +53,8 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
     endif()
 endif()
 
+add_compile_definitions(PRODUCT_VERSION="${PRODUCT_VERSION}")
+
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CPU)
 if(CPU MATCHES "^(i386|i686|x86)$")
     set(ARCH "x86")
@@ -69,10 +71,6 @@ elseif(CPU MATCHES "^(ppc64|powerpc64)$")
 else()
     set(ARCH "unknown")
 endif()
-
-add_compile_definitions(
-    ARCH_STRING="${ARCH}"
-    PRODUCT_VERSION="${PRODUCT_VERSION}")
 
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
