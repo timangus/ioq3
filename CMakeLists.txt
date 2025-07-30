@@ -55,23 +55,6 @@ endif()
 
 add_compile_definitions(PRODUCT_VERSION="${PRODUCT_VERSION}")
 
-string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CPU)
-if(CPU MATCHES "^(i386|i686|x86)$")
-    set(ARCH "x86")
-elseif(CPU MATCHES "^(amd64|x86_64)$")
-    set(ARCH "x86_64")
-elseif(CPU MATCHES "^(arm|armv7l)$")
-    set(ARCH "arm")
-elseif(CPU MATCHES "^(arm64|aarch64)$")
-    set(ARCH "arm64")
-elseif(CPU MATCHES "^(ppc|powerpc)$")
-    set(ARCH "ppc")
-elseif(CPU MATCHES "^(ppc64|powerpc64)$")
-    set(ARCH "ppc64")
-else()
-    set(ARCH "unknown")
-endif()
-
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
 include(cmake/compilers/all.cmake)

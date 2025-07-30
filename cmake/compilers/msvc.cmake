@@ -4,6 +4,8 @@ if(NOT CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     return()
 endif()
 
+include(cmake/utils/arch.cmake)
+
 enable_language(ASM_MASM)
 
 set(ASM_SOURCES

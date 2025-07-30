@@ -2,6 +2,7 @@ if(NOT BUILD_GAME_LIBRARIES AND NOT BUILD_GAME_QVMS)
     return()
 endif()
 
+include(cmake/utils/arch.cmake)
 include(cmake/utils/qvm_tools.cmake)
 include(cmake/utils/set_output_dirs.cmake)
 

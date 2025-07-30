@@ -2,6 +2,7 @@ if(NOT BUILD_RENDERER_GL2)
     return()
 endif()
 
+include(cmake/utils/arch.cmake)
 include(cmake/utils/set_output_dirs.cmake)
 include(cmake/renderer_common.cmake)
 

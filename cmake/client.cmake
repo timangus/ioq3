@@ -3,6 +3,7 @@ if(NOT BUILD_CLIENT)
 endif()
 
 include(cmake/utils/add_git_dependency.cmake)
+include(cmake/utils/arch.cmake)
 include(cmake/utils/set_output_dirs.cmake)
 include(cmake/shared_sources.cmake)
 
