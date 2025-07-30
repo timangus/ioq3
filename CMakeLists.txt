@@ -49,7 +49,6 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
 
     if(GIT_REV)
         set(PRODUCT_VERSION "${PRODUCT_VERSION}_GIT_${GIT_REV}")
-        set(HAVE_GIT YES)
     endif()
 endif()
 
