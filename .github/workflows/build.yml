@@ -42,3 +42,16 @@ jobs:
       run: |
         cmake -S . -B build -G "Ninja"
         cmake --build build
+  emscripten:
+    name: Emscripten
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install emsdk
+      uses: mymindstorm/setup-emsdk@v13
+      with:
+        version: 3.1.58
+    - name: Compile
+      run: |
+        emcmake cmake -S . -B build -G Ninja
+        cmake --build build

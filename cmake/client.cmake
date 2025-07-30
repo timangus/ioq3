@@ -104,3 +104,13 @@ if(NOT USE_RENDERER_DLOPEN)
     target_compile_options(     ${CLIENT_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
     target_link_libraries(      ${CLIENT_BINARY} PRIVATE ${RENDERER_LIBRARIES})
 endif()
+
+if(EMSCRIPTEN)
+    configure_file(${SOURCE_DIR}/web/client.html.in
+        ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${CLIENT_NAME}.html @ONLY)
+
+    if(NOT EMSCRIPTEN_PRELOAD_FILE)
+        configure_file(${SOURCE_DIR}/web/client-config.json
+            ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${CLIENT_NAME}-config.json COPYONLY)
+    endif()
+endif()
