@@ -36,3 +36,15 @@ if(EMSCRIPTEN_PRELOAD_FILE)
     endif()
     list(APPEND CLIENT_LINK_OPTIONS "--preload-file ${BASEGAME}")
 endif()
+
+function(deploy_shell_files)
+    configure_file(${SOURCE_DIR}/web/client.html.in
+        ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${CLIENT_NAME}.html @ONLY)
+
+    if(NOT EMSCRIPTEN_PRELOAD_FILE)
+        configure_file(${SOURCE_DIR}/web/client-config.json
+            ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${CLIENT_NAME}-config.json COPYONLY)
+    endif()
+endfunction()
+
+set(POST_CLIENT_CONFIGURE_FUNCTION deploy_shell_files)
