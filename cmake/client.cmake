@@ -118,3 +118,7 @@ if(EMSCRIPTEN)
             ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${CLIENT_NAME}-config.json COPYONLY)
     endif()
 endif()
+
+if(POST_CLIENT_CONFIGURE_FUNCTION)
+    cmake_language(CALL ${POST_CLIENT_CONFIGURE_FUNCTION})
+endif()

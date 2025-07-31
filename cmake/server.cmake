@@ -47,3 +47,7 @@ target_link_libraries(          ${SERVER_BINARY} PRIVATE ${COMMON_LIBRARIES} ${S
 target_link_options(            ${SERVER_BINARY} PRIVATE ${SERVER_LINK_OPTIONS})
 
 set_output_dirs(${SERVER_BINARY})
+
+if(POST_SERVER_CONFIGURE_FUNCTION)
+    cmake_language(CALL ${POST_SERVER_CONFIGURE_FUNCTION})
+endif()
