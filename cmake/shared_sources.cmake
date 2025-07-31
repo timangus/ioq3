@@ -2,6 +2,7 @@ include_guard(GLOBAL)
 
 include(cmake/utils/add_git_dependency.cmake)
 include(cmake/utils/arch.cmake)
+include(cmake/utils/disable_warnings.cmake)
 
 set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/cm_load.c
@@ -25,6 +26,11 @@ set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/ioapi.c
     ${SOURCE_DIR}/qcommon/vm.c
     ${SOURCE_DIR}/qcommon/vm_interpreted.c
+)
+
+disable_warnings(
+    ${SOURCE_DIR}/qcommon/unzip.c
+    ${SOURCE_DIR}/qcommon/ioapi.c
 )
 
 add_git_dependency(${SOURCE_DIR}/qcommon/common.c)

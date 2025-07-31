@@ -1,9 +1,11 @@
+include(cmake/utils/disable_warnings.cmake)
 include(cmake/utils/find_include_dirs.cmake)
 
 set(INTERNAL_ZLIB_DIR ${SOURCE_DIR}/zlib-1.3.1)
 
 if(USE_INTERNAL_ZLIB)
     file(GLOB_RECURSE ZLIB_SOURCES ${INTERNAL_ZLIB_DIR}/*.c)
+    disable_warnings(ZLIB_SOURCES)
     find_include_dirs(ZLIB_INCLUDE_DIRS ${ZLIB_SOURCES})
     set(ZLIB_DEFINITIONS NO_GZIP)
     list(APPEND SERVER_LIBRARY_SOURCES ${ZLIB_SOURCES})
