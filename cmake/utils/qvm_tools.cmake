@@ -14,8 +14,8 @@ ExternalProject_Add(qvm_tools
     CMAKE_ARGS -DSOURCE_DIR=${SOURCE_DIR}
     INSTALL_COMMAND "")
 
-set(Q3LCC ${TOOLS_DIR}/q3lcc)
-set(Q3ASM ${TOOLS_DIR}/q3asm)
+set(Q3LCC ${TOOLS_DIR}/$<CONFIG>/q3lcc)
+set(Q3ASM ${TOOLS_DIR}/$<CONFIG>/q3asm)
 
 function(add_qvm MODULE_NAME)
     list(REMOVE_AT ARGV 0)

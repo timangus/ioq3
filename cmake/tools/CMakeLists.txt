@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(qvm_tools LANGUAGES C)
 
+include(../utils/set_output_dirs.cmake)
+
 set(Q3ASM_SOURCES
     ${SOURCE_DIR}/tools/asm/q3asm.c
     ${SOURCE_DIR}/tools/asm/cmdlib.c
@@ -63,10 +65,13 @@ set(LBURG_SOURCES
 )
 
 add_executable(q3asm ${Q3ASM_SOURCES})
+set_output_dirs(q3asm)
 add_executable(q3lcc ${Q3LCC_SOURCES})
+set_output_dirs(q3lcc)
 add_dependencies(q3lcc q3rcc q3cpp)
 
 add_executable(lburg ${LBURG_SOURCES})
+set_output_dirs(lburg)
 set(DAGCHECK_C ${CMAKE_BINARY_DIR}/dagcheck.c)
 add_custom_command(
     OUTPUT ${DAGCHECK_C}
@@ -74,6 +79,8 @@ add_custom_command(
     DEPENDS lburg ${Q3RCC_DAGCHECK_SOURCE})
 
 add_executable(q3rcc ${Q3RCC_SOURCES} ${DAGCHECK_C})
+set_output_dirs(q3rcc)
 target_include_directories(q3rcc PRIVATE ${SOURCE_DIR}/tools/lcc/src)
 
 add_executable(q3cpp ${Q3CPP_SOURCES})
+set_output_dirs(q3cpp)
