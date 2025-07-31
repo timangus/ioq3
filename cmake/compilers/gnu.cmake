@@ -8,3 +8,8 @@ set(ASM_SOURCES
     ${SOURCE_DIR}/asm/snapvector.c
     ${SOURCE_DIR}/asm/ftola.c
 )
+
+add_compile_options(-Wall -fno-strict-aliasing -Wimplicit
+    -Wstrict-prototypes -Wformat=2 -Wno-format-zero-length -Wformat-security
+    -Wno-format-nonliteral -Wstrict-aliasing=2 -Wmissing-format-attribute
+    -Wdisabled-optimization -Werror-implicit-function-declaration)
