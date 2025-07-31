@@ -2,10 +2,13 @@ if(NOT USE_CODEC_VORBIS)
     return()
 endif()
 
+include(cmake/utils/disable_warnings.cmake)
+
 set(INTERNAL_OGG_DIR ${SOURCE_DIR}/libogg-1.3.6)
 
 if(USE_INTERNAL_OGG)
     file(GLOB_RECURSE OGG_SOURCES ${INTERNAL_OGG_DIR}/*.c)
+    disable_warnings(${OGG_SOURCES})
     set(OGG_INCLUDE_DIRS ${INTERNAL_OGG_DIR}/include)
     list(APPEND CLIENT_LIBRARY_SOURCES ${OGG_SOURCES})
 else()

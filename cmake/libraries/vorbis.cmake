@@ -2,10 +2,13 @@ if(NOT USE_CODEC_VORBIS)
     return()
 endif()
 
+include(cmake/utils/disable_warnings.cmake)
+
 set(INTERNAL_VORBIS_DIR ${SOURCE_DIR}/libvorbis-1.3.7)
 
 if(USE_INTERNAL_VORBIS)
     file(GLOB_RECURSE VORBIS_SOURCES ${INTERNAL_VORBIS_DIR}/*.c)
+    disable_warnings(${VORBIS_SOURCES})
     set(VORBIS_INCLUDE_DIRS ${INTERNAL_VORBIS_DIR}/include ${INTERNAL_VORBIS_DIR}/lib)
     set(VORBIS_DEFINITIONS USE_CODEC_VORBIS)
     list(APPEND CLIENT_LIBRARY_SOURCES ${VORBIS_SOURCES})
