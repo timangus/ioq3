@@ -8,10 +8,14 @@ include(ExternalProject)
 
 set(TOOLS_DIR ${CMAKE_BINARY_DIR}/tools)
 
+if(CMAKE_BUILD_TYPE)
+    set(BUILD_TYPE_ARG -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+endif()
+
 ExternalProject_Add(qvm_tools
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/cmake/tools
     BINARY_DIR ${TOOLS_DIR}
-    CMAKE_ARGS -DSOURCE_DIR=${SOURCE_DIR}
+    CMAKE_ARGS -DSOURCE_DIR=${SOURCE_DIR} ${BUILD_TYPE_ARG}
     INSTALL_COMMAND "")
 
 set(Q3LCC ${TOOLS_DIR}/$<CONFIG>/q3lcc)
