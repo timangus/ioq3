@@ -32,7 +32,11 @@ set(RENDERER_GL1_SOURCES
     ${SOURCE_DIR}/renderergl1/tr_world.c
 )
 
-set(RENDERER_GL1_BINARY renderer_opengl1_${ARCH})
+if(USE_ARCHLESS_FILENAMES)
+    set(RENDERER_GL1_BINARY renderer_opengl1)
+else()
+    set(RENDERER_GL1_BINARY renderer_opengl1_${ARCH})
+endif()
 
 list(APPEND RENDERER_GL1_BINARY_SOURCES
     ${RENDERER_COMMON_SOURCES}
