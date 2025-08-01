@@ -7,6 +7,8 @@ include(cmake/utils/arch.cmake)
 include(cmake/utils/set_output_dirs.cmake)
 include(cmake/shared_sources.cmake)
 
+include(cmake/renderer_common.cmake)
+
 set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/cl_cgame.c
     ${SOURCE_DIR}/client/cl_cin.c
@@ -82,16 +84,6 @@ list(APPEND CLIENT_BINARY_SOURCES
     ${SDL_CLIENT_SOURCES}
     ${CLIENT_LIBRARY_SOURCES})
 
-if(NOT USE_RENDERER_DLOPEN)
-    if(BUILD_RENDERER_GL1)
-        list(APPEND CLIENT_BINARY_SOURCES ${RENDERER_GL1_BINARY_SOURCES})
-    elseif(BUILD_RENDERER_GL2)
-        list(APPEND CLIENT_BINARY_SOURCES ${RENDERER_GL2_BINARY_SOURCES})
-    else()
-        message(FATAL_ERROR "No renderer selected")
-    endif()
-endif()
-
 add_executable(${CLIENT_BINARY} ${CLIENT_EXECUTABLE_OPTIONS} ${CLIENT_BINARY_SOURCES})
 
 target_include_directories(     ${CLIENT_BINARY} PRIVATE ${CLIENT_INCLUDE_DIRS})
@@ -103,6 +95,11 @@ target_link_options(            ${CLIENT_BINARY} PRIVATE ${CLIENT_LINK_OPTIONS})
 set_output_dirs(${CLIENT_BINARY})
 
 if(NOT USE_RENDERER_DLOPEN)
+    target_sources(${CLIENT_BINARY} PRIVATE
+        # These are never simultaneously populated
+        ${RENDERER_GL1_BINARY_SOURCES}
+        ${RENDERER_GL2_BINARY_SOURCES})
+
     target_include_directories( ${CLIENT_BINARY} PRIVATE ${RENDERER_INCLUDE_DIRS})
     target_compile_definitions( ${CLIENT_BINARY} PRIVATE ${RENDERER_DEFINITIONS})
     target_compile_options(     ${CLIENT_BINARY} PRIVATE ${RENDERER_COMPILE_OPTIONS})
