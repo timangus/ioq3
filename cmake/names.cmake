@@ -10,5 +10,7 @@ set(CGAME_MODULE "cgame")
 set(GAME_MODULE "qagame")
 set(UI_MODULE "ui")
 
+set(WINDOWS_ICON_PATH "${CMAKE_SOURCE_DIR}/misc/quake3.ico")
+
 set(MACOS_ICON_PATH "${CMAKE_SOURCE_DIR}/misc/quake3.icns")
 set(MACOS_BUNDLE_ID "org.ioquake.${CLIENT_NAME}")
