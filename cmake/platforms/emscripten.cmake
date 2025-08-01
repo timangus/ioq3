@@ -25,7 +25,7 @@ list(APPEND CLIENT_LINK_OPTIONS
     -sEXPORTED_RUNTIME_METHODS=FS,addRunDependency,removeRunDependency
     -sEXIT_RUNTIME=1
     -sEXPORT_ES6
-    -sEXPORT_NAME=ioquake3
+    -sEXPORT_NAME=${CLIENT_NAME}
 )
 
 option(EMSCRIPTEN_PRELOAD_FILE "Preload game files into .data file" OFF)
