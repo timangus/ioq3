@@ -65,6 +65,7 @@ endforeach()
 
 if(USE_ARCHLESS_FILENAMES)
     set(RENDERER_GL2_BINARY renderer_opengl2)
+    list(APPEND RENDERER_DEFINITIONS USE_ARCHLESS_FILENAMES)
 else()
     set(RENDERER_GL2_BINARY renderer_opengl2_${ARCH})
 endif()
