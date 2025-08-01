@@ -9,7 +9,10 @@ set(ASM_SOURCES
     ${SOURCE_DIR}/asm/ftola.c
 )
 
-add_compile_options(-Wall -fno-strict-aliasing -Wimplicit
-    -Wstrict-prototypes -Wformat=2 -Wno-format-zero-length -Wformat-security
-    -Wno-format-nonliteral -Wstrict-aliasing=2 -Wmissing-format-attribute
+add_compile_options(-Wall -Wimplicit
+    -Wstrict-prototypes -Wformat=2  -Wformat-security
+    -Wstrict-aliasing=2 -Wmissing-format-attribute
     -Wdisabled-optimization -Werror-implicit-function-declaration)
+
+add_compile_options(-Wno-strict-aliasing
+    -Wno-format-zero-length -Wno-format-nonliteral)
