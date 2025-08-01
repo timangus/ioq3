@@ -1,2 +1,5 @@
-include(cmake/compilers/msvc.cmake)
+include(cmake/compilers/appleclang.cmake)
+include(cmake/compilers/clang.cmake)
+include(cmake/compilers/gcc.cmake)
 include(cmake/compilers/gnu.cmake)
+include(cmake/compilers/msvc.cmake)
