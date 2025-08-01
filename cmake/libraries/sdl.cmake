@@ -10,12 +10,21 @@ if(NOT SDL2_FOUND)
     set(SDL2_INCLUDE_DIRS ${INTERNAL_SDL_DIR}/include)
 
     # On Windows and macOS we have internal SDL binaries we can use
-    if(MINGW)
-        set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/win64/libSDL2main.a ${SOURCE_DIR}/libs/win64/libSDL2.dll.a)
-    elseif(WIN32)
-        set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/win64/SDL2main.lib ${SOURCE_DIR}/libs/win64/SDL2.lib)
+    if(WIN32)
+        if(MINGW)
+            set(SDL2_LIBRARIES
+                ${SOURCE_DIR}/libs/win64/libSDL2main.a
+                ${SOURCE_DIR}/libs/win64/libSDL2.dll.a)
+        elseif(MSVC)
+            set(SDL2_LIBRARIES
+                ${SOURCE_DIR}/libs/win64/SDL2main.lib
+                ${SOURCE_DIR}/libs/win64/SDL2.lib)
+        endif()
+
+        list(APPEND CLIENT_DEPLOY_LIBRARIES ${SOURCE_DIR}/libs/win64/SDL2.dll)
     elseif(APPLE)
         set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/macos/libSDL2main.a ${SOURCE_DIR}/libs/macos/libSDL2-2.0.0.dylib)
+        list(APPEND CLIENT_DEPLOY_LIBRARIES ${SOURCE_DIR}/libs/macos/libSDL2-2.0.0.dylib)
     else()
         message(FATAL_ERROR "SDL2 not found and no internal binaries available")
     endif()

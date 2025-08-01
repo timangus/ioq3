@@ -107,6 +107,13 @@ if(NOT USE_RENDERER_DLOPEN)
     target_link_libraries(      ${CLIENT_BINARY} PRIVATE ${RENDERER_LIBRARIES})
 endif()
 
+foreach(LIBRARY IN LISTS CLIENT_DEPLOY_LIBRARIES)
+    add_custom_command(TARGET ${CLIENT_BINARY} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+            ${LIBRARY}
+            $<TARGET_FILE_DIR:${CLIENT_BINARY}>)
+endforeach()
+
 if(POST_CLIENT_CONFIGURE_FUNCTION)
     cmake_language(CALL ${POST_CLIENT_CONFIGURE_FUNCTION})
 endif()
