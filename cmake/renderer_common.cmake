@@ -8,7 +8,7 @@ set(RENDERER_COMMON_SOURCES
     ${SOURCE_DIR}/renderercommon/tr_image_png.c
     ${SOURCE_DIR}/renderercommon/tr_image_tga.c
     ${SOURCE_DIR}/renderercommon/tr_noise.c
-    ${SOURCE_DIR}/qcommon/puff.c
+    ${SOURCE_DIR}/renderercommon/puff.c
 )
 
 set(SDL_RENDERER_SOURCES
@@ -17,7 +17,7 @@ set(SDL_RENDERER_SOURCES
 )
 
 set(DYNAMIC_RENDERER_SOURCES
-    ${SOURCE_DIR}/renderergl1/tr_subs.c
+    ${SOURCE_DIR}/renderercommon/tr_subs.c
     ${SOURCE_DIR}/qcommon/q_shared.c
     ${SOURCE_DIR}/qcommon/q_math.c
 )
