@@ -29,12 +29,37 @@ endif()
 function(finish_macos_app)
     get_filename_component(MACOS_ICON_FILE ${MACOS_ICON_PATH} NAME)
 
+    set(MACOS_APP_BUNDLE_NAME ${CLIENT_NAME})
+    set(MACOS_APP_EXECUTABLE_NAME ${CLIENT_BINARY})
+    set(MACOS_APP_GUI_IDENTIFIER ${MACOS_BUNDLE_ID})
+    set(MACOS_APP_ICON_FILE ${MACOS_ICON_FILE})
+    set(MACOS_APP_SHORT_VERSION_STRING ${PRODUCT_VERSION})
+    set(MACOS_APP_BUNDLE_VERSION ${PRODUCT_VERSION})
+    set(MACOS_APP_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET})
+    set(MACOS_APP_COPYRIGHT ${COPYRIGHT})
+
+    if(PROTOCOL_HANDLER_SCHEME)
+        set(MACOS_APP_PLIST_URL_TYPES
+        "<key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>${MACOS_APP_BUNDLE_NAME}</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>${PROTOCOL_HANDLER_SCHEME}</string>
+                </array>
+            </dict>
+        </array>")
+    else()
+        set(MACOS_APP_PLIST_URL_TYPES "")
+    endif()
+
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/Info.plist.in
+        ${CMAKE_BINARY_DIR}/Info.plist @ONLY)
+
     set_target_properties(${CLIENT_BINARY} PROPERTIES
-        MACOSX_BUNDLE_BUNDLE_NAME "${CLIENT_NAME}"
-        MACOSX_BUNDLE_GUI_IDENTIFIER "${MACOS_BUNDLE_ID}"
-        MACOSX_BUNDLE_ICON_FILE ${MACOS_ICON_FILE}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PRODUCT_VERSION}"
-        MACOSX_BUNDLE_BUNDLE_VERSION "${PRODUCT_VERSION}")
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_BINARY_DIR}/Info.plist)
 
     set(RESOURCES_DIR $<TARGET_FILE_DIR:${CLIENT_BINARY}>/../Resources)
     add_custom_command(TARGET ${CLIENT_BINARY} POST_BUILD
