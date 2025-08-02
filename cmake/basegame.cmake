@@ -2,9 +2,9 @@ if(NOT BUILD_GAME_LIBRARIES AND NOT BUILD_GAME_QVMS)
     return()
 endif()
 
-include(cmake/utils/arch.cmake)
-include(cmake/utils/qvm_tools.cmake)
-include(cmake/utils/set_output_dirs.cmake)
+include(utils/arch)
+include(utils/qvm_tools)
+include(utils/set_output_dirs)
 
 set(CGAME_SOURCES
     ${SOURCE_DIR}/cgame/cg_main.c

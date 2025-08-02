@@ -3,8 +3,8 @@ if(NOT BUILD_SERVER)
     return()
 endif()
 
-include(cmake/utils/set_output_dirs.cmake)
-include(cmake/shared_sources.cmake)
+include(utils/set_output_dirs)
+include(shared_sources)
 
 set(NULL_SOURCES
     ${SOURCE_DIR}/null/null_client.c

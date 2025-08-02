@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
-include(cmake/names.cmake)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(names)
+
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES C ASM)
 
 option(BUILD_SERVER "Build dedicated server" ON)
@@ -57,13 +60,13 @@ add_compile_definitions(PRODUCT_VERSION="${PRODUCT_VERSION}")
 
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/code)
 
-include(cmake/compilers/all.cmake)
-include(cmake/platforms/all.cmake)
-include(cmake/libraries/all.cmake)
+include(compilers/all)
+include(platforms/all)
+include(libraries/all)
 
-include(cmake/server.cmake)
-include(cmake/renderer_gl1.cmake)
-include(cmake/renderer_gl2.cmake)
-include(cmake/client.cmake)
-include(cmake/basegame.cmake)
-include(cmake/missionpack.cmake)
+include(server)
+include(renderer_gl1)
+include(renderer_gl2)
+include(client)
+include(basegame)
+include(missionpack)

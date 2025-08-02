@@ -2,12 +2,12 @@ if(NOT BUILD_CLIENT)
     return()
 endif()
 
-include(cmake/utils/add_git_dependency.cmake)
-include(cmake/utils/arch.cmake)
-include(cmake/utils/set_output_dirs.cmake)
-include(cmake/shared_sources.cmake)
+include(utils/add_git_dependency)
+include(utils/arch)
+include(utils/set_output_dirs)
+include(shared_sources)
 
-include(cmake/renderer_common.cmake)
+include(renderer_common)
 
 set(CLIENT_SOURCES
     ${SOURCE_DIR}/client/cl_cgame.c

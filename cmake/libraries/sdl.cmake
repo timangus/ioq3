@@ -4,7 +4,7 @@ if(NOT WIN32 AND NOT APPLE)
     set(SYSTEM_SDL_REQUIRED REQUIRED)
 endif()
 
-include(cmake/utils/arch.cmake)
+include(utils/arch)
 
 find_package(SDL2 QUIET ${SYSTEM_SDL_REQUIRED})
 

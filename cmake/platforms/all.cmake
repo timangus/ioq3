@@ -1,4 +1,4 @@
-include(cmake/platforms/windows.cmake)
-include(cmake/platforms/unix.cmake)
-include(cmake/platforms/macos.cmake)
-include(cmake/platforms/emscripten.cmake)
+include(platforms/windows)
+include(platforms/unix)
+include(platforms/macos)
+include(platforms/emscripten)

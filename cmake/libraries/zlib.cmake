@@ -1,5 +1,5 @@
-include(cmake/utils/disable_warnings.cmake)
-include(cmake/utils/find_include_dirs.cmake)
+include(utils/disable_warnings)
+include(utils/find_include_dirs)
 
 set(INTERNAL_ZLIB_DIR ${SOURCE_DIR}/zlib-1.3.1)
 

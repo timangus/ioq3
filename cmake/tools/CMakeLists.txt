@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(qvm_tools LANGUAGES C)
 
-include(../utils/set_output_dirs.cmake)
+include(utils/set_output_dirs)
 
 set(Q3ASM_SOURCES
     ${SOURCE_DIR}/tools/asm/q3asm.c

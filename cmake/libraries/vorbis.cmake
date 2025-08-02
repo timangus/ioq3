@@ -2,7 +2,7 @@ if(NOT USE_CODEC_VORBIS)
     return()
 endif()
 
-include(cmake/utils/disable_warnings.cmake)
+include(utils/disable_warnings)
 
 set(INTERNAL_VORBIS_DIR ${SOURCE_DIR}/libvorbis-1.3.7)
 

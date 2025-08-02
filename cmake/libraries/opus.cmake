@@ -2,8 +2,8 @@ if(NOT USE_CODEC_OPUS)
     return()
 endif()
 
-include(cmake/utils/disable_warnings.cmake)
-include(cmake/utils/find_include_dirs.cmake)
+include(utils/disable_warnings)
+include(utils/find_include_dirs)
 
 set(INTERNAL_OPUS_DIR ${SOURCE_DIR}/opus-1.5.2)
 set(INTERNAL_OPUSFILE_DIR ${SOURCE_DIR}/opusfile-0.12)

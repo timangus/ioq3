@@ -1,8 +1,8 @@
 include_guard(GLOBAL)
 
-include(cmake/utils/add_git_dependency.cmake)
-include(cmake/utils/arch.cmake)
-include(cmake/utils/disable_warnings.cmake)
+include(utils/add_git_dependency)
+include(utils/arch)
+include(utils/disable_warnings)
 
 set(COMMON_SOURCES
     ${SOURCE_DIR}/qcommon/cm_load.c
