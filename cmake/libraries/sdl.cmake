@@ -4,6 +4,8 @@ if(NOT WIN32 AND NOT APPLE)
     set(SYSTEM_SDL_REQUIRED REQUIRED)
 endif()
 
+include(cmake/utils/arch.cmake)
+
 find_package(SDL2 QUIET ${SYSTEM_SDL_REQUIRED})
 
 if(NOT SDL2_FOUND)
@@ -11,17 +13,25 @@ if(NOT SDL2_FOUND)
 
     # On Windows and macOS we have internal SDL binaries we can use
     if(WIN32)
-        if(MINGW)
-            set(SDL2_LIBRARIES
-                ${SOURCE_DIR}/libs/win64/libSDL2main.a
-                ${SOURCE_DIR}/libs/win64/libSDL2.dll.a)
-        elseif(MSVC)
-            set(SDL2_LIBRARIES
-                ${SOURCE_DIR}/libs/win64/SDL2main.lib
-                ${SOURCE_DIR}/libs/win64/SDL2.lib)
+        if(ARCH STREQUAL "x86_64")
+            set(LIB_DIR ${SOURCE_DIR}/libs/win64)
+        elseif(ARCH STREQUAL "x86")
+            set(LIB_DIR ${SOURCE_DIR}/libs/win32)
+        else()
+            message(FATAL_ERROR "Unknown ARCH")
         endif()
 
-        list(APPEND CLIENT_DEPLOY_LIBRARIES ${SOURCE_DIR}/libs/win64/SDL2.dll)
+        if(MINGW)
+            set(SDL2_LIBRARIES
+                ${LIB_DIR}/libSDL2main.a
+                ${LIB_DIR}/libSDL2.dll.a)
+        elseif(MSVC)
+            set(SDL2_LIBRARIES
+                ${LIB_DIR}/SDL2main.lib
+                ${LIB_DIR}/SDL2.lib)
+        endif()
+
+        list(APPEND CLIENT_DEPLOY_LIBRARIES ${LIB_DIR}/SDL2.dll)
     elseif(APPLE)
         set(SDL2_LIBRARIES ${SOURCE_DIR}/libs/macos/libSDL2main.a ${SOURCE_DIR}/libs/macos/libSDL2-2.0.0.dylib)
         list(APPEND CLIENT_DEPLOY_LIBRARIES ${SOURCE_DIR}/libs/macos/libSDL2-2.0.0.dylib)
