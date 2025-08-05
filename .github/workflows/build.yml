@@ -32,7 +32,7 @@ jobs:
         ARCHIVE: 1
     - uses: actions/upload-artifact@v4
       with:
-        name: Windows
+        name: Windows-test
         path: build/*.zip
   macos-legacy:
     name: macOS (Legacy Makefile)
