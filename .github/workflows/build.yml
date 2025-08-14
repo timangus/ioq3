@@ -95,6 +95,7 @@ jobs:
       run: |
         choco install msys2 --yes --no-progress
         C:\tools\msys64\usr\bin\bash -lc "pacman -Sy --noconfirm mingw-w64-x86_64-gcc"
+        echo "C:\tools\msys64\mingw64\bin" >> $env:GITHUB_PATH
     - name: Compile
       run: |
         windres --version
