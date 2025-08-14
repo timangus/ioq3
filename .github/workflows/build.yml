@@ -93,6 +93,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Compile
       run: |
+        windres --version
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
         cmake --build build
         $version = Get-Content build/version.txt -Raw
