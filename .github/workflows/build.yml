@@ -91,6 +91,9 @@ jobs:
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v4
+    - name: Install newer MinGW
+      run: |
+        choco install mingw --yes --no-progress
     - name: Compile
       run: |
         windres --version
