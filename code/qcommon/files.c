@@ -491,6 +491,22 @@ static void FS_ReplaceSeparators( char *path ) {
 }
 
 /*
+====================
+FS_ResolvePathVariable
+
+Apply Sys_ResolvePath to a cvar
+====================
+*/
+static void FS_ResolvePathVariable( const char *variable )
+{
+	char resolvedPath[MAX_OSPATH];
+
+	const char *path = Cvar_VariableString( variable );
+	Sys_ResolvePath( path, resolvedPath, sizeof(resolvedPath) );
+	Cvar_Set( variable, resolvedPath );
+}
+
+/*
 ===================
 FS_BuildOSPath
 
@@ -4087,6 +4103,9 @@ void FS_InitFilesystem( void ) {
 	Com_StartupVariable("fs_basepath");
 	Com_StartupVariable("fs_homepath");
 	Com_StartupVariable("fs_game");
+
+	FS_ResolvePathVariable("fs_basepath");
+	FS_ResolvePathVariable("fs_homepath");
 
 	if(!FS_FilenameCompare(Cvar_VariableString("fs_game"), com_basegame->string))
 		Cvar_Set("fs_game", "");

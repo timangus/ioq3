@@ -75,13 +75,41 @@ char *Sys_BinaryPath(void)
 }
 
 /*
+================
+Sys_ResolvePath
+
+Takes a possibly relative path and writes an absolute path into out.
+If relative, the path is resolved relative to Sys_BinaryPath().
+================
+*/
+void Sys_ResolvePath(const char *path, char *out, size_t outSize)
+{
+	if (!path || !*path)
+	{
+		*out = '\0';
+		return;
+	}
+
+	if (Sys_IsAbsolutePath(path))
+	{
+		Q_strncpyz(out, path, outSize);
+	}
+	else
+	{
+		Q_strncpyz(out, Sys_BinaryPath(), outSize);
+		Q_strcat(out, outSize, "/");
+		Q_strcat(out, outSize, path);
+	}
+}
+
+/*
 =================
 Sys_SetDefaultInstallPath
 =================
 */
 void Sys_SetDefaultInstallPath(const char *path)
 {
-	Q_strncpyz(installPath, path, sizeof(installPath));
+	Sys_ResolvePath(path, installPath, sizeof(installPath));
 }
 
 /*

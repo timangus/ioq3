@@ -424,6 +424,32 @@ char *Sys_Cwd( void ) {
 	return cwd;
 }
 
+qboolean Sys_IsAbsolutePath( const char *path )
+{
+	if (!path || !*path)
+		return qfalse;
+
+	while (isspace(*path))
+		path++;
+
+	// UNC path: \\server\share or extended \\?\ path
+	if ((*path == '\\' && *(path + 1) == '\\') ||
+		(*path == '/' && *(path + 1) == '/'))
+		return qtrue;
+
+	// Drive letter + colon + slash/backslash: C:\foo or C:/foo
+	if (isalpha((unsigned char)*path) && *(path + 1) == ':' &&
+		(*(path + 2) == '\\' || *(path + 2) == '/'))
+		return qtrue;
+
+	// Root-relative on current drive: \foo
+	if (*path == '\\' || *path == '/')
+		return qtrue;
+
+	// Everything else must be relative
+	return qfalse;
+}
+
 /*
 ==============================================================
 

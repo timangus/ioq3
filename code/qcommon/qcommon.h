@@ -1121,6 +1121,8 @@ FILE	*Sys_FOpen( const char *ospath, const char *mode );
 qboolean Sys_Mkdir( const char *path );
 FILE	*Sys_Mkfifo( const char *ospath );
 char	*Sys_Cwd( void );
+qboolean Sys_IsAbsolutePath( const char *path );
+void	Sys_ResolvePath(const char *path, char *out, size_t outSize);
 void	Sys_SetDefaultInstallPath(const char *path);
 char	*Sys_DefaultInstallPath(void);
 char	*Sys_SteamPath(void);

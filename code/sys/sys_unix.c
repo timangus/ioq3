@@ -352,6 +352,17 @@ char *Sys_Cwd( void )
 	return cwd;
 }
 
+qboolean Sys_IsAbsolutePath(const char *path)
+{
+	if (!path || !*path)
+		return qfalse;
+
+	while (isspace(*path))
+		path++;
+
+	return *path == '/';
+}
+
 /*
 ==============================================================
 
