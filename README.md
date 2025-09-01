@@ -471,9 +471,8 @@ binary must not detect any original quake3 game pak files. If this
 condition is met, the game will set com_standalone to 1 and is then running
 in stand alone mode.
 
-If you want the engine to use a different directory in your homepath than
-e.g. "Quake3" on Windows or ".q3a" on Linux, then set a new name at startup
-by adding
+If you want the engine to use a different directory in your homepaths than
+"Quake3" then set a new name at startup by adding
 
     +set com_homepath <homedirname>
 
@@ -487,7 +486,7 @@ matching game name.
 
 Example line:
 
-    +set com_basegame basefoo +set com_homepath .foo
+    +set com_basegame basefoo +set com_homepath foo
     +set com_gamename foo
 
 If you really changed parts that would make vanilla ioquake3 incompatible with
