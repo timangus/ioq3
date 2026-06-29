@@ -30,16 +30,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install Dependencies
-      run: |
-        sudo apt install libx11-dev libxext-dev libxrandr-dev \
-          libxcursor-dev libxfixes-dev libxi-dev libxss-dev \
-          libxtst-dev libxkbcommon-dev
-        curl -LO https://github.com/libsdl-org/SDL/releases/download/release-${{ needs.versions.outputs.sdl }}/SDL3-${{ needs.versions.outputs.sdl }}.tar.gz
-        tar zxf SDL3-${{ needs.versions.outputs.sdl }}.tar.gz
-        cd SDL3-${{ needs.versions.outputs.sdl }}
-        cmake -S . -B build
-        cmake --build build
-        sudo cmake --install build
+      uses: libsdl-org/setup-sdl@v1
+      with:
+        install-linux-dependencies: true
+        version: ${{ needs.versions.outputs.sdl }}
     - name: Compile
       run: |
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -175,6 +169,11 @@ jobs:
     needs: versions
     steps:
     - uses: actions/checkout@v4
+    - name: Install Dependencies
+      uses: libsdl-org/setup-sdl@v1
+      with:
+        install-linux-dependencies: true
+        version: ${{ needs.versions.outputs.sdl }}
     - name: Install Dependencies
       run: |
         sudo apt install libx11-dev libxext-dev libxrandr-dev \
